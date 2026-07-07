@@ -1,0 +1,25 @@
+# Visual Studio / Rider
+.vs/
+.vscode/
+*.user
+*.suo
+
+# .NET build output
+backend/bin/
+backend/obj/
+**/bin/
+**/obj/
+
+# .NET secrets - real values live locally only, never committed
+backend/appsettings.json
+backend/appsettings.Development.json
+
+# Node / Vite frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# OS noise
+.DS_Store
+Thumbs.db

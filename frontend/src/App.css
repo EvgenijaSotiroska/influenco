@@ -1,0 +1,108 @@
+.auth-page,
+.dashboard-page {
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 24px;
+    font-family: system-ui, sans-serif;
+}
+
+.dashboard-page {
+    max-width: 600px;
+}
+
+.auth-page form,
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-page label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+}
+
+.auth-page input {
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.auth-page button,
+.dashboard-page button {
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    background: #111;
+    color: white;
+    cursor: pointer;
+}
+
+    .auth-page button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+.auth-page .toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+    .auth-page .toggle button {
+        flex: 1;
+        background: #eee;
+        color: #333;
+    }
+
+        .auth-page .toggle button.active {
+            background: #111;
+            color: white;
+        }
+
+.error {
+    color: #c0392b;
+    font-size: 14px;
+}
+
+.dashboard-page pre {
+    background: #f5f5f5;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 13px;
+}
+
+.snackbar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-family: system-ui, sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.snackbar-error {
+    background: #c0392b;
+}
+
+.snackbar-success {
+    background: #27ae60;
+}
+
+.snackbar-info {
+    background: #2c3e50;
+}
+
+.snackbar-warning {
+    background: #e67e22;
+}
