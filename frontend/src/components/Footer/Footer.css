@@ -1,0 +1,127 @@
+.footer {
+    border-top: 1px solid var(--rule);
+    background: var(--cream);
+}
+
+.footer-top {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 56px 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    gap: 64px;
+    border-bottom: 1px solid var(--rule);
+}
+
+.footer-brand {
+    max-width: 360px;
+}
+
+.footer-logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0 0 18px;
+}
+
+.footer-description {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin: 0;
+}
+
+.footer-links {
+    display: flex;
+    gap: 80px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-heading {
+    font-family: var(--font-body);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.footer-column a {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+    .footer-column a:hover {
+        color: var(--muted);
+    }
+
+.footer-bottom {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 22px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--muted);
+}
+
+.footer-bottom-links {
+    display: flex;
+    gap: 28px;
+}
+
+    .footer-bottom-links a {
+        color: var(--muted);
+        text-decoration: none;
+        transition: color 0.15s ease;
+    }
+
+        .footer-bottom-links a:hover {
+            color: var(--ink);
+        }
+
+
+@media (max-width: 860px) {
+    .footer-top {
+        flex-direction: column;
+        gap: 40px;
+        padding: 48px 20px;
+    }
+
+    .footer-links {
+        gap: 48px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 22px 20px;
+    }
+}
+
+
+@media (max-width: 520px) {
+    .footer-top,
+    .footer-bottom {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 32px;
+    }
+}

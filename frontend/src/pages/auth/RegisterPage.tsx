@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import useRegister from "../hooks/useRegister.ts";
+import useRegister from "../../hooks/useRegister.ts";
 
 type AccountType = "influencer" | "brand";
 

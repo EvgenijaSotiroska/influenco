@@ -6,7 +6,7 @@ using influenco.backend.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace influenco.backend.impl.Services;
+namespace influenco.backend.Services.impl;
 
 public class TokenService : ITokenService
 {

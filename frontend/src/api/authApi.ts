@@ -4,7 +4,7 @@ import type {
     RegisterInfluencerRequest,
     RegisterBrandRequest,
     AuthResponse,
-} from "../types/auth.ts";
+} from "./types/auth.ts";
 
 const userApi = {
     login: async (data: LoginRequest) => {

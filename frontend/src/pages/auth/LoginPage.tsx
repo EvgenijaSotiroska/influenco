@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import useLogin from "../hooks/useLogin.ts";
+import useLogin from "../../hooks/useLogin.ts";
 
 export function LoginPage() {
     const { login, loading } = useLogin();
