@@ -7,6 +7,8 @@ import { HomePage } from "./pages/home/HomePage.tsx";
 import { LoginPage } from "./pages/auth/LoginPage.tsx";
 import { RegisterPage } from "./pages/auth/RegisterPage.tsx";
 import { DashboardPage } from "./pages/DashboardPage.tsx";
+import { InfluencerProfilePage } from "./pages/InfluencerProfilePage.tsx";
+import { InfluencerProfilePreviewPage } from "./pages/Influencerprofilepreviewpage.tsx";
 import "./App.css";
 
 function App() {
@@ -23,6 +25,22 @@ function App() {
                             element={
                                 <ProtectedRoute>
                                     <Layout><DashboardPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/profile/edit"
+                            element={
+                                <ProtectedRoute allowedRole="Influencer">
+                                    <Layout><InfluencerProfilePage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/profile/preview"
+                            element={
+                                <ProtectedRoute allowedRole="Influencer">
+                                    <Layout><InfluencerProfilePreviewPage /></Layout>
                                 </ProtectedRoute>
                             }
                         />

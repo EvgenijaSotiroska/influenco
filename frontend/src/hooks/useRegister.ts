@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { RegisterInfluencerRequest, RegisterBrandRequest } from "../types/auth.ts";
+import type { RegisterInfluencerRequest, RegisterBrandRequest } from "../api/types/auth.ts";
 import userApi from "../api/authApi.ts";
 import { useNavigate } from "react-router-dom";
 import useSnackbar from "./useSnackbar.ts";
