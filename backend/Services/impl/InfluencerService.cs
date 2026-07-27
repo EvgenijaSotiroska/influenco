@@ -55,4 +55,32 @@ public class InfluencerService : IInfluencerService
 
         await _context.SaveChangesAsync();
     }
+
+    public async Task<DiscoverInfluencersResponseDTO> GetDiscoverInfluencersAsync(int count)
+    {
+        var query = _context.Influencers.AsNoTracking();
+
+        var totalCount = await query.CountAsync();
+
+        var influencers = await query
+            .OrderByDescending(i => i.IsVerified) 
+            .Take(count)
+            .Select(i => new DiscoverInfluencerDTO
+            {
+                Id = i.Id,
+                DisplayName = i.DisplayName,
+                Handle = i.Handle,
+                ProfilePictureUrl = i.ProfilePictureUrl,
+                Location = i.Location,
+                Niche = i.Categories.FirstOrDefault(),
+                IsVerified = i.IsVerified
+            })
+            .ToListAsync();
+
+        return new DiscoverInfluencersResponseDTO
+        {
+            Influencers = influencers,
+            TotalCount = totalCount
+        };
+    }
 }

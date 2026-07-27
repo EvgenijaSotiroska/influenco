@@ -14,5 +14,5 @@ public class Influencer : BaseEntity
     public string? Location { get; set; }
     public List<string> Categories { get; set; } = new(); 
     public bool IsVerified { get; set; }
-    public string Handle { get; set; } = null!;
+    public string? Handle { get; set; } = null!;
 }

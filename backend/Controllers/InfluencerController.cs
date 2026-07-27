@@ -47,4 +47,12 @@ public class InfluencerController : ControllerBase
 
         return Guid.Parse(userId);
     }
+
+    [HttpGet("discover")]
+    [AllowAnonymous]
+    public async Task<ActionResult<DiscoverInfluencersResponseDTO>> GetDiscover([FromQuery] int count = 6)
+    {
+        var result = await _service.GetDiscoverInfluencersAsync(count);
+        return Ok(result);
+    }
 }

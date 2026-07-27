@@ -5,8 +5,8 @@ import {
     type KeyboardEvent,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import useInfluencerProfile from "../hooks/useInfluencerProfile";
-import type { InfluencerProfile } from "../api/types/influencer";
+import useInfluencerProfile from "../../hooks/useInfluencerProfile";
+import type { InfluencerProfile } from "../../api/types/influencer";
 import "./InfluencerProfilePage.css";
 
 const emptyProfile: InfluencerProfile = {

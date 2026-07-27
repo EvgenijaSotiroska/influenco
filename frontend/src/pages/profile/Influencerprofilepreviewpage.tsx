@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useInfluencerProfile from "../hooks/useInfluencerProfile";
+import useInfluencerProfile from "../../hooks/useInfluencerProfile";
 import "./InfluencerProfilePreviewPage.css";
 
 export function InfluencerProfilePreviewPage() {

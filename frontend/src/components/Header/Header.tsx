@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import "./Header.css";
 
 export function Header() {
     const { isLoggedIn, logout } = useAuth();
+    const location = useLocation();
+
+    const isActive = (path: string) => location.pathname === path;
 
     return (
         <header className="site-header">
@@ -13,22 +16,68 @@ export function Header() {
                 </Link>
 
                 <nav className="main-nav">
-                    <Link to="/" className="nav-link nav-link-active">Home</Link>
-                    <Link to="/discover" className="nav-link">Discover</Link>
-                    <Link to="/for-brands" className="nav-link">For brands</Link>
-                    <Link to="/for-creators" className="nav-link">For creators</Link>
+                    {isLoggedIn ? (
+                        <>
+                            <Link
+                                to="/"
+                                className={`nav-link ${isActive("/") ? "nav-link-active" : ""}`}
+                            >
+                                Home
+                            </Link>
+                            <Link
+                                to="/profile/preview"
+                                className={`nav-link ${isActive("/profile/preview") ? "nav-link-active" : ""}`}
+                            >
+                                Profile
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link
+                                to="/"
+                                className={`nav-link ${isActive("/") ? "nav-link-active" : ""}`}
+                            >
+                                Home
+                            </Link>
+                            <Link
+                                to="/discover"
+                                className={`nav-link ${isActive("/discover") ? "nav-link-active" : ""}`}
+                            >
+                                Discover
+                            </Link>
+                            <Link
+                                to="/for-brands"
+                                className={`nav-link ${isActive("/for-brands") ? "nav-link-active" : ""}`}
+                            >
+                                For brands
+                            </Link>
+                            <Link
+                                to="/for-creators"
+                                className={`nav-link ${isActive("/for-creators") ? "nav-link-active" : ""}`}
+                            >
+                                For creators
+                            </Link>
+                        </>
+                    )}
                 </nav>
 
                 <div className="header-actions">
                     {isLoggedIn ? (
-                        <>
-                            <Link to="/dashboard" className="link-plain">Dashboard</Link>
-                            <button className="btn btn-solid" onClick={logout}>Log out</button>
-                        </>
+                        <button
+                            type="button"
+                            className="btn btn-solid"
+                            onClick={logout}
+                        >
+                            Log out
+                        </button>
                     ) : (
                         <>
-                            <Link to="/login" className="link-plain">Sign in</Link>
-                            <Link to="/register" className="btn btn-solid">Get started</Link>
+                            <Link to="/login" className="link-plain">
+                                Sign in
+                            </Link>
+                            <Link to="/register" className="btn btn-solid">
+                                Get started
+                            </Link>
                         </>
                     )}
                 </div>
