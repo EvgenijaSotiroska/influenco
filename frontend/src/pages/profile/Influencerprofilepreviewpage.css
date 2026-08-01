@@ -12,7 +12,7 @@
 
 .preview-cover {
     width: 100%;
-    height: 340px;
+    height: 280px;
     background: linear-gradient(135deg, #cfd9e6, #e8dce8) center / cover no-repeat;
     position: relative;
 }
@@ -20,9 +20,9 @@
 .preview-avatar {
     position: absolute;
     left: 32px;
-    bottom: -56px;
-    width: 140px;
-    height: 140px;
+    bottom: -48px;
+    width: 120px;
+    height: 120px;
     border-radius: 8px;
     background: var(--ink) center / cover no-repeat;
     border: 4px solid var(--cream);
@@ -32,7 +32,7 @@
 .preview-body {
     max-width: 1240px;
     margin: 0 auto;
-    padding: 72px 32px 0;
+    padding: 64px 32px 0;
 }
 
 .preview-heading-row {
@@ -41,21 +41,19 @@
     justify-content: space-between;
     gap: 20px;
     flex-wrap: wrap;
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 32px;
 }
 
 .preview-name {
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(34px, 4.5vw, 56px);
+    font-size: clamp(30px, 4vw, 48px);
     color: var(--ink);
-    margin: 0 0 8px;
+    margin: 0 0 6px;
 }
 
 .preview-meta {
     font-family: var(--font-body);
-    font-size: 14.5px;
+    font-size: 14px;
     color: var(--muted);
     margin: 0;
 }
@@ -67,16 +65,16 @@
 
 .preview-bio {
     font-family: var(--font-body);
-    font-size: 15.5px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.55;
     color: var(--muted);
     max-width: 70ch;
-    margin: 28px 0 0;
+    margin: 16px 0 0;
 }
 
 .preview-stats {
-    margin-top: 40px;
-    margin-bottom: 80px;
+    margin-top: 24px;
+    margin-bottom: 16px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     border-top: 1px solid var(--rule);
@@ -84,10 +82,10 @@
 }
 
 .preview-stat {
-    padding: 32px 24px;
+    padding: 20px 20px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
 }
 
     .preview-stat:not(:last-child) {
@@ -96,16 +94,108 @@
 
 .preview-stat-number {
     font-family: var(--font-display);
-    font-size: 32px;
+    font-size: 26px;
     color: var(--ink);
 }
 
 .preview-stat-label {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 11px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
+}
+
+.preview-stats-note {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 20px;
+}
+
+.preview-platforms {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.preview-platform-card {
+    flex: 1;
+    min-width: 200px;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease;
+}
+
+    .preview-platform-card:hover {
+        border-color: var(--ink);
+    }
+
+.preview-platform-name {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
+}
+
+.preview-platform-followers {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: var(--muted);
+}
+
+.preview-platform-er {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.preview-audience {
+    margin-bottom: 48px;
+}
+
+.preview-section-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 19px;
+    color: var(--ink);
+    margin: 0 0 14px;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+}
+
+.preview-audience-grid {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+    .preview-audience-grid > div {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+.preview-audience-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.preview-audience-value {
+    font-family: var(--font-display);
+    font-size: 16px;
+    color: var(--ink);
 }
 
 @media (max-width: 720px) {
@@ -120,5 +210,9 @@
     .preview-stat:nth-child(1),
     .preview-stat:nth-child(2) {
         border-bottom: 1px solid var(--rule);
+    }
+
+    .preview-platforms {
+        flex-direction: column;
     }
 }

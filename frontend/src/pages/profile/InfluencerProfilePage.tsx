@@ -19,6 +19,7 @@ const emptyProfile: InfluencerProfile = {
     location: "",
     categories: [],
     isVerified: false,
+    totalReach: 0,
 };
 
 export function InfluencerProfilePage() {
@@ -46,6 +47,14 @@ export function InfluencerProfilePage() {
         setProfile({
             ...currentProfile,
             [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setProfile({
+            ...currentProfile,
+            [name]: value === "" ? undefined : Number(value),
         });
     };
 
@@ -99,6 +108,18 @@ export function InfluencerProfilePage() {
                 categories: currentProfile.categories,
                 profilePictureUrl: currentProfile.profilePictureUrl,
                 coverImageUrl: currentProfile.coverImageUrl,
+
+                instagramUrl: currentProfile.instagramUrl,
+                instagramFollowers: currentProfile.instagramFollowers,
+                instagramAvgViews: currentProfile.instagramAvgViews,
+                instagramStoryViews: currentProfile.instagramStoryViews,
+
+                tikTokUrl: currentProfile.tikTokUrl,
+                tikTokFollowers: currentProfile.tikTokFollowers,
+                tikTokAvgViews: currentProfile.tikTokAvgViews,
+
+                audienceAgeRange: currentProfile.audienceAgeRange,
+                audienceTopLocations: currentProfile.audienceTopLocations,
             });
 
             navigate("/profile/preview");
@@ -126,37 +147,25 @@ export function InfluencerProfilePage() {
                     </p>
                 </div>
 
-                <button
-                    type="submit"
-                    className="btn btn-solid"
-                    disabled={saving}
-                >
-                    {saving
-                        ? "Saving..."
-                        : profile
-                            ? "Save changes"
-                            : "Create profile"}
+                <button type="submit" className="btn btn-solid" disabled={saving}>
+                    {saving ? "Saving..." : profile ? "Save changes" : "Create profile"}
                 </button>
             </div>
 
             <div className="profile-edit-grid">
                 <div className="panel-card">
-                    <span className="field-label">Cover &amp; avatar</span>
+                    <span className="panel-heading">Cover &amp; avatar</span>
 
                     <div
                         className="cover-preview"
                         style={
                             currentProfile.coverImageUrl
-                                ? {
-                                    backgroundImage: `url(${currentProfile.coverImageUrl})`,
-                                }
+                                ? { backgroundImage: `url(${currentProfile.coverImageUrl})` }
                                 : undefined
                         }
                     >
                         {!currentProfile.coverImageUrl && (
-                            <span className="cover-placeholder">
-                                No cover image yet
-                            </span>
+                            <span className="cover-placeholder">No cover image yet</span>
                         )}
                     </div>
 
@@ -165,9 +174,7 @@ export function InfluencerProfilePage() {
                             className="avatar-preview"
                             style={
                                 currentProfile.profilePictureUrl
-                                    ? {
-                                        backgroundImage: `url(${currentProfile.profilePictureUrl})`,
-                                    }
+                                    ? { backgroundImage: `url(${currentProfile.profilePictureUrl})` }
                                     : undefined
                             }
                         >
@@ -178,13 +185,9 @@ export function InfluencerProfilePage() {
                     </div>
 
                     <div className="field-group">
-                        <label
-                            className="field-label"
-                            htmlFor="coverImageUrl"
-                        >
+                        <label className="field-label" htmlFor="coverImageUrl">
                             Cover image URL
                         </label>
-
                         <input
                             id="coverImageUrl"
                             name="coverImageUrl"
@@ -196,13 +199,9 @@ export function InfluencerProfilePage() {
                     </div>
 
                     <div className="field-group">
-                        <label
-                            className="field-label"
-                            htmlFor="profilePictureUrl"
-                        >
+                        <label className="field-label" htmlFor="profilePictureUrl">
                             Avatar image URL
                         </label>
-
                         <input
                             id="profilePictureUrl"
                             name="profilePictureUrl"
@@ -215,15 +214,13 @@ export function InfluencerProfilePage() {
                 </div>
 
                 <div className="panel-card">
+                    <span className="panel-heading">Basic info</span>
+
                     <div className="field-row">
                         <div className="field-group">
-                            <label
-                                className="field-label"
-                                htmlFor="displayName"
-                            >
+                            <label className="field-label" htmlFor="displayName">
                                 Full name
                             </label>
-
                             <input
                                 id="displayName"
                                 name="displayName"
@@ -238,10 +235,8 @@ export function InfluencerProfilePage() {
                             <label className="field-label" htmlFor="handle">
                                 Handle
                             </label>
-
                             <div className="handle-input">
                                 <span className="handle-prefix">@</span>
-
                                 <input
                                     id="handle"
                                     name="handle"
@@ -255,13 +250,9 @@ export function InfluencerProfilePage() {
                     </div>
 
                     <div className="field-group">
-                        <label
-                            className="field-label"
-                            htmlFor="location"
-                        >
+                        <label className="field-label" htmlFor="location">
                             Location
                         </label>
-
                         <input
                             id="location"
                             name="location"
@@ -275,7 +266,6 @@ export function InfluencerProfilePage() {
                         <label className="field-label" htmlFor="bio">
                             Bio
                         </label>
-
                         <textarea
                             id="bio"
                             name="bio"
@@ -287,27 +277,17 @@ export function InfluencerProfilePage() {
                     </div>
 
                     <div className="field-group">
-                        <label
-                            className="field-label"
-                            htmlFor="new-category"
-                        >
+                        <label className="field-label" htmlFor="new-category">
                             Categories
                         </label>
-
                         <div className="category-tags">
                             {currentProfile.categories.map((category) => (
-                                <span
-                                    className="category-tag"
-                                    key={category}
-                                >
+                                <span className="category-tag" key={category}>
                                     {category}
-
                                     <button
                                         type="button"
                                         className="category-remove"
-                                        onClick={() =>
-                                            removeCategory(category)
-                                        }
+                                        onClick={() => removeCategory(category)}
                                         aria-label={`Remove ${category}`}
                                     >
                                         ×
@@ -321,13 +301,166 @@ export function InfluencerProfilePage() {
                                     className="category-add-input"
                                     placeholder="+ Add category"
                                     value={newCategory}
-                                    onChange={(e) =>
-                                        setNewCategory(e.target.value)
-                                    }
+                                    onChange={(e) => setNewCategory(e.target.value)}
                                     onKeyDown={handleCategoryKeyDown}
                                     onBlur={addCategory}
                                 />
                             </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="panel-card panel-card-platform">
+                    <span className="panel-heading">
+                        <span className="platform-dot platform-dot-instagram" />
+                        Instagram
+                    </span>
+
+                    <div className="field-group">
+                        <label className="field-label" htmlFor="instagramUrl">
+                            Profile URL
+                        </label>
+                        <input
+                            id="instagramUrl"
+                            name="instagramUrl"
+                            className="field-input"
+                            placeholder="https://instagram.com/yourhandle"
+                            value={currentProfile.instagramUrl ?? ""}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="field-row">
+                        <div className="field-group">
+                            <label className="field-label" htmlFor="instagramFollowers">
+                                Followers
+                            </label>
+                            <input
+                                id="instagramFollowers"
+                                name="instagramFollowers"
+                                type="number"
+                                min="0"
+                                className="field-input"
+                                value={currentProfile.instagramFollowers ?? ""}
+                                onChange={handleNumberChange}
+                            />
+                        </div>
+
+                        <div className="field-group">
+                            <label className="field-label" htmlFor="instagramAvgViews">
+                                Avg. views / post
+                            </label>
+                            <input
+                                id="instagramAvgViews"
+                                name="instagramAvgViews"
+                                type="number"
+                                min="0"
+                                className="field-input"
+                                value={currentProfile.instagramAvgViews ?? ""}
+                                onChange={handleNumberChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="field-group">
+                        <label className="field-label" htmlFor="instagramStoryViews">
+                            Avg. story views
+                        </label>
+                        <input
+                            id="instagramStoryViews"
+                            name="instagramStoryViews"
+                            type="number"
+                            min="0"
+                            className="field-input"
+                            value={currentProfile.instagramStoryViews ?? ""}
+                            onChange={handleNumberChange}
+                        />
+                    </div>
+                </div>
+
+                <div className="panel-card panel-card-platform">
+                    <span className="panel-heading">
+                        <span className="platform-dot platform-dot-tiktok" />
+                        TikTok
+                    </span>
+
+                    <div className="field-group">
+                        <label className="field-label" htmlFor="tikTokUrl">
+                            Profile URL
+                        </label>
+                        <input
+                            id="tikTokUrl"
+                            name="tikTokUrl"
+                            className="field-input"
+                            placeholder="https://tiktok.com/@yourhandle"
+                            value={currentProfile.tikTokUrl ?? ""}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div className="field-row">
+                        <div className="field-group">
+                            <label className="field-label" htmlFor="tikTokFollowers">
+                                Followers
+                            </label>
+                            <input
+                                id="tikTokFollowers"
+                                name="tikTokFollowers"
+                                type="number"
+                                min="0"
+                                className="field-input"
+                                value={currentProfile.tikTokFollowers ?? ""}
+                                onChange={handleNumberChange}
+                            />
+                        </div>
+
+                        <div className="field-group">
+                            <label className="field-label" htmlFor="tikTokAvgViews">
+                                Avg. views / video
+                            </label>
+                            <input
+                                id="tikTokAvgViews"
+                                name="tikTokAvgViews"
+                                type="number"
+                                min="0"
+                                className="field-input"
+                                value={currentProfile.tikTokAvgViews ?? ""}
+                                onChange={handleNumberChange}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="panel-card panel-card-wide">
+                    <span className="panel-heading">Audience</span>
+
+                    <div className="field-row">
+                        <div className="field-group">
+                            <label className="field-label" htmlFor="audienceAgeRange">
+                                Age range
+                            </label>
+                            <input
+                                id="audienceAgeRange"
+                                name="audienceAgeRange"
+                                className="field-input"
+                                placeholder="e.g. 18–24"
+                                value={currentProfile.audienceAgeRange ?? ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="field-group">
+                            <label className="field-label" htmlFor="audienceTopLocations">
+                                Top locations
+                            </label>
+                            <input
+                                id="audienceTopLocations"
+                                name="audienceTopLocations"
+                                className="field-input"
+                                placeholder="e.g. Skopje, Bitola"
+                                value={currentProfile.audienceTopLocations ?? ""}
+                                onChange={handleChange}
+                            />
                         </div>
                     </div>
                 </div>
