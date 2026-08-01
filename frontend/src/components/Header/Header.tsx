@@ -3,10 +3,12 @@ import useAuth from "../../hooks/useAuth";
 import "./Header.css";
 
 export function Header() {
-    const { isLoggedIn, logout } = useAuth();
+    const { isLoggedIn, user, logout } = useAuth();
     const location = useLocation();
 
     const isActive = (path: string) => location.pathname === path;
+
+    const profilePath = user?.role === "Brand" ? "/brand/profile/preview" : "/profile/preview";
 
     return (
         <header className="site-header">
@@ -25,8 +27,8 @@ export function Header() {
                                 Home
                             </Link>
                             <Link
-                                to="/profile/preview"
-                                className={`nav-link ${isActive("/profile/preview") ? "nav-link-active" : ""}`}
+                                to={profilePath}
+                                className={`nav-link ${isActive(profilePath) ? "nav-link-active" : ""}`}
                             >
                                 Profile
                             </Link>
@@ -63,11 +65,7 @@ export function Header() {
 
                 <div className="header-actions">
                     {isLoggedIn ? (
-                        <button
-                            type="button"
-                            className="btn btn-solid"
-                            onClick={logout}
-                        >
+                        <button type="button" className="btn btn-solid" onClick={logout}>
                             Log out
                         </button>
                     ) : (

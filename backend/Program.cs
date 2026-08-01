@@ -42,6 +42,7 @@ builder.Services
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IInfluencerService, InfluencerService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()!;
 

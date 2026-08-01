@@ -9,6 +9,8 @@ import { RegisterPage } from "./pages/auth/RegisterPage.tsx";
 import { DashboardPage } from "./pages/DashboardPage.tsx";
 import { InfluencerProfilePage } from "./pages/profile/InfluencerProfilePage.tsx";
 import { InfluencerProfilePreviewPage } from "./pages/profile/Influencerprofilepreviewpage.tsx";
+import { BrandProfilePreviewPage } from "./pages/profile/BrandProfilePreviewPage.tsx";
+import { BrandProfilePage } from "./pages/profile/BrandProfilePage.tsx";
 import { DiscoverPage } from "./pages/discover/DiscoverPage.tsx";
 import "./App.css";
 
@@ -43,6 +45,22 @@ function App() {
                             element={
                                 <ProtectedRoute allowedRole="Influencer">
                                     <Layout><InfluencerProfilePreviewPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/brand/profile/edit"
+                            element={
+                                <ProtectedRoute allowedRole="Brand">
+                                    <Layout><BrandProfilePage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/brand/profile/preview"
+                            element={
+                                <ProtectedRoute allowedRole="Brand">
+                                    <Layout><BrandProfilePreviewPage /></Layout>
                                 </ProtectedRoute>
                             }
                         />

@@ -19,10 +19,10 @@ const useLogin = () => {
             navigate("/");
         } catch (err: any) {
             if (err.response?.status === 401) {
-                throw new Error( "Wrong email or password. Please try again." );
+                throw new Error("Wrong email or password. Please try again.");
             }
 
-            throw new Error( "Login failed. Please try again." );
+            throw new Error("Login failed. Please try again.");
         } finally {
             setLoading(false);
         }

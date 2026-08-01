@@ -1,0 +1,154 @@
+.brand-form {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px;
+}
+
+
+
+.brand-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+
+
+.brand-label {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+}
+
+
+
+.brand-header h1 {
+    font-size: 48px;
+    font-weight: 400;
+    margin: 10px 0;
+}
+
+
+
+.brand-header p {
+    color: var(--muted);
+}
+
+
+
+.brand-columns {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+}
+
+
+
+
+.brand-company-box,
+.brand-logo-box {
+    background: white;
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+
+
+    .brand-company-box h2,
+    .brand-logo-box h2 {
+        margin: 0;
+        font-size: 22px;
+    }
+
+
+
+
+
+    .brand-company-box label,
+    .brand-logo-box label {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+
+
+
+    .brand-company-box input,
+    .brand-company-box textarea,
+    .brand-logo-box input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--rule-strong);
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+
+
+
+
+    .brand-company-box textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+
+
+
+
+.brand-logo-preview {
+    width: 100%;
+    height: 240px;
+    border-radius: 10px;
+    border: 1px solid var(--rule);
+    background: #e5e1d7;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+}
+
+
+
+
+
+.brand-save-button {
+    padding: 12px 25px;
+    border-radius: 999px;
+    border: none;
+    background: var(--ink);
+    color: white;
+    cursor: pointer;
+}
+
+
+
+
+.brand-error {
+    background: #fdecea;
+    color: #b3261e;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+
+
+
+@media(max-width:900px) {
+
+    .brand-columns {
+        grid-template-columns: 1fr;
+    }
+}

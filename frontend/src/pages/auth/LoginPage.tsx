@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 
 export function LoginPage() {
     const { login, loading } = useLogin();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,7 +15,13 @@ export function LoginPage() {
         setError("");
 
         try {
-            await login({ email, password });
+            const user = await login({ email, password });
+
+            if (user.role === "Brand") {
+                navigate("/brand/home");
+            } else {
+                navigate("/");
+            }
         } catch (err: any) {
             setError(err.message);
         }
