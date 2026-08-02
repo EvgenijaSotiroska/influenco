@@ -1,6 +1,6 @@
 import axios from "../axios/axios";
 import type { InfluencerProfile, UpdateInfluencerProfileRequest } from "./types/influencer.ts";
-import type { DiscoverInfluencersResponse } from "./types/discover.ts";
+import type { DiscoverInfluencersResponse, DiscoverFilters } from "./types/discover.ts";
 
 const influencerApi = {
 
@@ -13,10 +13,21 @@ const influencerApi = {
         await axios.put("/influencer/profile", data);
     },
 
-    async discoverProfies(count: number = 6): Promise<DiscoverInfluencersResponse> { 
-            const response = await axios.get("/influencer/discover", { params: { count } });
-            return response.data;
-    }
+    async discoverProfiles(
+        page: number,
+        pageSize: number,
+        filters: DiscoverFilters
+    ): Promise<DiscoverInfluencersResponse> {
+        const response = await axios.get("/influencer/discover", {
+            params: { page, pageSize, ...filters },
+        });
+        return response.data;
+    },
+
+    async getInfluencerDetail(id: string): Promise<InfluencerProfile> {
+        const response = await axios.get(`influencer/discover/${id}`);
+        return response.data;
+    },
 };
 
 export default influencerApi;

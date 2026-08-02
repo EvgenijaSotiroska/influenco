@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import influencerApi from "../api/influencerApi";
-import { withFakeStats } from "../utils/fakeStats";
-import type { DiscoverInfluencerWithStats } from "../api/types/discover.ts";
+import type { DiscoverFilters, DiscoverInfluencer } from "../api/types/discover.ts";
 
-export function useDiscoverInfluencers(count: number = 6) {
-    const [influencers, setInfluencers] = useState<DiscoverInfluencerWithStats[]>([]);
+const PAGE_SIZE = 6;
+
+export function useDiscoverInfluencers(filters: DiscoverFilters) {
+    const [influencers, setInfluencers] = useState<DiscoverInfluencer[]>([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const filtersKey = JSON.stringify(filters);
 
     useEffect(() => {
         let cancelled = false;
@@ -14,10 +20,12 @@ export function useDiscoverInfluencers(count: number = 6) {
         async function load() {
             try {
                 setLoading(true);
-                const data = await influencerApi.discoverProfies(count);
+                setError(null);
+                const data = await influencerApi.discoverProfiles(1, PAGE_SIZE, filters);
                 if (!cancelled) {
-                    setInfluencers(data.influencers.map(withFakeStats));
-                    setError(null);
+                    setInfluencers(data.influencers);
+                    setPage(1);
+                    setHasMore(data.hasMore);
                 }
             } catch (err) {
                 console.error("Discover load error:", err);
@@ -31,7 +39,24 @@ export function useDiscoverInfluencers(count: number = 6) {
         return () => {
             cancelled = true;
         };
-    }, [count]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filtersKey]);
 
-    return { influencers, loading, error };
+    const loadMore = useCallback(async () => {
+        const nextPage = page + 1;
+        try {
+            setLoadingMore(true);
+            const data = await influencerApi.discoverProfiles(nextPage, PAGE_SIZE, filters);
+            setInfluencers((prev) => [...prev, ...data.influencers]);
+            setPage(nextPage);
+            setHasMore(data.hasMore);
+        } catch (err) {
+            console.error("Discover load more error:", err);
+        } finally {
+            setLoadingMore(false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page, filtersKey]);
+
+    return { influencers, loading, loadingMore, hasMore, error, loadMore };
 }

@@ -9,4 +9,6 @@ public class DiscoverInfluencerDTO
     public string? Location { get; set; }
     public string? Niche { get; set; }
     public bool IsVerified { get; set; }
+    public int TotalFollowers { get; set; }
+    public double? OverallEngagementRate { get; set; }
 }

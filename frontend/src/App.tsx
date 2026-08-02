@@ -49,6 +49,14 @@ function App() {
                             }
                         />
                         <Route
+                            path="/profile/preview/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <Layout><InfluencerProfilePreviewPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
                             path="/brand/profile/edit"
                             element={
                                 <ProtectedRoute allowedRole="Brand">

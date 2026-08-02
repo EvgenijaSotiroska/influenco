@@ -8,7 +8,6 @@ namespace influenco.backend.Controllers;
 
 [ApiController]
 [Route("api/influencer")]
-[Authorize(Roles = "Influencer")]
 public class InfluencerController : ControllerBase
 {
     private readonly IInfluencerService _service;
@@ -19,6 +18,7 @@ public class InfluencerController : ControllerBase
     }
 
     [HttpGet("profile")]
+    [Authorize(Roles = "Influencer")]
     public async Task<ActionResult<GetInfluencerProfileResponse>> GetProfile()
     {
         var userId = GetUserId();
@@ -29,6 +29,7 @@ public class InfluencerController : ControllerBase
     }
 
     [HttpPut("profile")]
+    [Authorize(Roles = "Influencer")]
     public async Task<IActionResult> UpdateProfile(UpdateInfluencerProfileRequest request)
     {
         var userId = GetUserId();
@@ -36,6 +37,22 @@ public class InfluencerController : ControllerBase
         await _service.UpdateProfileAsync(userId, request);
 
         return NoContent();
+    }
+
+    [HttpGet("discover")]
+    [AllowAnonymous]
+    public async Task<ActionResult<DiscoverInfluencersResponseDTO>> GetDiscover([FromQuery] DiscoverQuery query)
+    {
+        var result = await _service.GetDiscoverInfluencersAsync(query);
+        return Ok(result);
+    }
+
+    [HttpGet("discover/{id}")]
+    [Authorize] 
+    public async Task<ActionResult<GetInfluencerProfileResponse>> GetInfluencerDetail(Guid id)
+    {
+        var profile = await _service.GetPublicProfileByIdAsync(id);
+        return Ok(profile);
     }
 
     private Guid GetUserId()
@@ -46,13 +63,5 @@ public class InfluencerController : ControllerBase
             throw new UnauthorizedAccessException();
 
         return Guid.Parse(userId);
-    }
-
-    [HttpGet("discover")]
-    [AllowAnonymous]
-    public async Task<ActionResult<DiscoverInfluencersResponseDTO>> GetDiscover([FromQuery] int count = 6)
-    {
-        var result = await _service.GetDiscoverInfluencersAsync(count);
-        return Ok(result);
     }
 }

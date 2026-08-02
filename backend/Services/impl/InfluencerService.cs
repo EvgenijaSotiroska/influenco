@@ -26,6 +26,18 @@ public class InfluencerService : IInfluencerService
         return MapToResponse(influencer);
     }
 
+    public async Task<GetInfluencerProfileResponse> GetPublicProfileByIdAsync(Guid influencerId)
+    {
+        var influencer = await _context.Influencers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(i => i.Id == influencerId);
+
+        if (influencer == null)
+            throw new Exception("Influencer not found.");
+
+        return MapToResponse(influencer);
+    }
+
     public async Task UpdateProfileAsync(Guid userId, UpdateInfluencerProfileRequest request)
     {
         var influencer = await _context.Influencers
@@ -60,30 +72,63 @@ public class InfluencerService : IInfluencerService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<DiscoverInfluencersResponseDTO> GetDiscoverInfluencersAsync(int count)
+    public async Task<DiscoverInfluencersResponseDTO> GetDiscoverInfluencersAsync(DiscoverQuery query)
     {
-        var query = _context.Influencers.AsNoTracking();
-        var totalCount = await query.CountAsync();
+        var influencersQuery = _context.Influencers.AsNoTracking().AsQueryable();
 
-        var influencers = await query
-            .OrderByDescending(i => i.IsVerified)
-            .Take(count)
-            .Select(i => new DiscoverInfluencerDTO
+        if (!string.IsNullOrWhiteSpace(query.Location))
+        {
+            influencersQuery = influencersQuery.Where(i =>
+                i.Location != null && i.Location.Contains(query.Location));
+        }
+
+        // Categories is a converted collection column — EF can't translate .Contains() on it,
+        // so it's filtered client-side below, alongside the follower-range filter.
+        var candidates = await influencersQuery.ToListAsync();
+
+        var filtered = candidates
+            .Select(i => new
             {
-                Id = i.Id,
-                DisplayName = i.DisplayName,
-                Handle = i.Handle,
-                ProfilePictureUrl = i.ProfilePictureUrl,
-                Location = i.Location,
-                Niche = i.Categories.FirstOrDefault(),
-                IsVerified = i.IsVerified
+                Influencer = i,
+                TotalFollowers = (i.InstagramFollowers ?? 0) + (i.TikTokFollowers ?? 0)
             })
-            .ToListAsync();
+            .Where(x => string.IsNullOrWhiteSpace(query.Category)
+                || x.Influencer.Categories.Contains(query.Category))
+            .Where(x => query.MinFollowers == null || x.TotalFollowers >= query.MinFollowers)
+            .Where(x => query.MaxFollowers == null || x.TotalFollowers <= query.MaxFollowers)
+            .OrderByDescending(x => x.Influencer.IsVerified)
+            .ThenByDescending(x => x.TotalFollowers)
+            .ToList();
+
+        var totalCount = filtered.Count;
+
+        var page = query.Page < 1 ? 1 : query.Page;
+        var pageSize = query.PageSize < 1 ? 6 : query.PageSize;
+
+        var pageItems = filtered
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(x => new DiscoverInfluencerDTO
+            {
+                Id = x.Influencer.Id,
+                DisplayName = x.Influencer.DisplayName,
+                Handle = x.Influencer.Handle,
+                ProfilePictureUrl = x.Influencer.ProfilePictureUrl,
+                Location = x.Influencer.Location,
+                Niche = x.Influencer.Categories.FirstOrDefault(),
+                IsVerified = x.Influencer.IsVerified,
+                TotalFollowers = x.TotalFollowers,
+                OverallEngagementRate = CalculateOverallEngagementRate(x.Influencer)
+            })
+            .ToList();
 
         return new DiscoverInfluencersResponseDTO
         {
-            Influencers = influencers,
-            TotalCount = totalCount
+            Influencers = pageItems,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize,
+            HasMore = page * pageSize < totalCount
         };
     }
 
@@ -128,6 +173,18 @@ public class InfluencerService : IInfluencerService
             TikTokEngagementRate = ttEngagement,
             OverallEngagementRate = rates.Count > 0 ? Math.Round(rates.Average(), 2) : null
         };
+    }
+
+    private static double? CalculateOverallEngagementRate(Influencer influencer)
+    {
+        var ig = CalculateEngagementRate(influencer.InstagramAvgViews, influencer.InstagramFollowers);
+        var tt = CalculateEngagementRate(influencer.TikTokAvgViews, influencer.TikTokFollowers);
+
+        var rates = new List<double>();
+        if (ig.HasValue) rates.Add(ig.Value);
+        if (tt.HasValue) rates.Add(tt.Value);
+
+        return rates.Count > 0 ? Math.Round(rates.Average(), 2) : null;
     }
 
     private static double? CalculateEngagementRate(int? avgViews, int? followers)

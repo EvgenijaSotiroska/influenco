@@ -27,6 +27,12 @@ export function Header() {
                                 Home
                             </Link>
                             <Link
+                                to="/discover"
+                                className={`nav-link ${isActive("/discover") ? "nav-link-active" : ""}`}
+                            >
+                                Discover
+                            </Link>
+                            <Link
                                 to={profilePath}
                                 className={`nav-link ${isActive(profilePath) ? "nav-link-active" : ""}`}
                             >

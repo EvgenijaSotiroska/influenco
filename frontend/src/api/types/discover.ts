@@ -6,16 +6,21 @@ export interface DiscoverInfluencer {
     location: string | null;
     niche: string | null;
     isVerified: boolean;
+    totalFollowers: number;
+    overallEngagementRate: number | null;
 }
 
 export interface DiscoverInfluencersResponse {
     influencers: DiscoverInfluencer[];
     totalCount: number;
+    page: number;
+    pageSize: number;
+    hasMore: boolean;
 }
 
-// Client-only fake stats, generated per render session
-export interface DiscoverInfluencerWithStats extends DiscoverInfluencer {
-    platform: string;
-    followerCount: number;
-    engagementRate: number;
+export interface DiscoverFilters {
+    location?: string;
+    category?: string;
+    minFollowers?: number;
+    maxFollowers?: number;
 }

@@ -6,5 +6,6 @@ public interface IInfluencerService
 {
     Task<GetInfluencerProfileResponse> GetProfileAsync(Guid userId);
     Task UpdateProfileAsync(Guid userId, UpdateInfluencerProfileRequest request);
-    Task<DiscoverInfluencersResponseDTO> GetDiscoverInfluencersAsync(int count);
+    Task<DiscoverInfluencersResponseDTO> GetDiscoverInfluencersAsync(DiscoverQuery query);
+    Task<GetInfluencerProfileResponse> GetPublicProfileByIdAsync(Guid influencerId);
 }
