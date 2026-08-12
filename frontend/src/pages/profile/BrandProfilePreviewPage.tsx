@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import useBrandProfile from "../../hooks/useBrandProfile";
+import { ActiveCampaignsCard } from "../../components/ActiveCampaignsCard/ActiveCampaignsCard";
 import "./BrandProfilePreviewPage.css";
 
 export function BrandProfilePreviewPage() {
@@ -28,70 +29,75 @@ export function BrandProfilePreviewPage() {
         .join("")
         .toUpperCase();
 
-    return (
-        <div className="brand-preview-page">
-            <div className="brand-preview-body">
-                <div className="brand-preview-heading-row">
-                    <div className="brand-preview-identity">
-                        <div
-                            className="brand-preview-logo"
-                            style={
-                                profile.logoUrl
-                                    ? {
-                                        backgroundImage: `url(${profile.logoUrl})`,
-                                    }
-                                    : undefined
-                            }
-                        >
-                            {!profile.logoUrl && (
-                                <span>{initials || "?"}</span>
-                            )}
-                        </div>
+    const websiteUrl = profile.website
+        ? profile.website.startsWith("http")
+            ? profile.website
+            : `https://${profile.website}`
+        : "";
 
-                        <div>
-                            <h1 className="brand-preview-name">
-                                {profile.companyName}
-                            </h1>
-
-                            {profile.industry && (
-                                <p className="brand-preview-meta">
-                                    {profile.industry}
-                                </p>
-                            )}
-                        </div>
+return (
+    <div className="brand-preview-page">
+        <div className="brand-preview-body">
+            <div className="brand-preview-heading-row">
+                <div className="brand-preview-identity">
+                    <div
+                        className="brand-preview-logo"
+                        style={
+                            profile.logoUrl
+                                ? {
+                                    backgroundImage: `url(${profile.logoUrl})`,
+                                }
+                                : undefined
+                        }
+                    >
+                        {!profile.logoUrl && (
+                            <span>{initials || "?"}</span>
+                        )}
                     </div>
 
-                    <div className="brand-preview-actions">
-                        <Link
-                            to="/brand/profile/edit"
-                            className="btn btn-outline"
-                        >
-                            Edit profile
-                        </Link>
+                    <div>
+                        <h1 className="brand-preview-name">
+                            {profile.companyName}
+                        </h1>
+
+                        {profile.industry && (
+                            <p className="brand-preview-meta">
+                                {profile.industry}
+                            </p>
+                        )}
                     </div>
                 </div>
 
-                {profile.website && (
-                    <a
-                        href={
-                            profile.website.startsWith("http")
-                                ? profile.website
-                                : `https://${profile.website}`
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                        className="brand-preview-website"
+                <div className="brand-preview-actions">
+                    <Link
+                        to="/brand/profile/edit"
+                        className="btn btn-outline"
                     >
-                        {profile.website}
-                    </a>
-                )}
-
-                {profile.description && (
-                    <p className="brand-preview-description">
-                        {profile.description}
-                    </p>
-                )}
+                        Edit profile
+                    </Link>
+                </div>
             </div>
+
+            {profile.website && (
+                <a
+                    href={websiteUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="brand-preview-website"
+                >
+                    {profile.website}
+                </a>
+            )}
+
+            {profile.description && (
+                <p className="brand-preview-description">
+                    {profile.description}
+                </p>
+            )}
+
+            <ActiveCampaignsCard />
         </div>
-    );
+    </div>
+);
 }
+

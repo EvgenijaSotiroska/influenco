@@ -9,6 +9,7 @@ export function Header() {
     const isActive = (path: string) => location.pathname === path;
 
     const profilePath = user?.role === "Brand" ? "/brand/profile/preview" : "/profile/preview";
+    const isInfluencer = user?.role === "Influencer";
 
     return (
         <header className="site-header">
@@ -32,6 +33,14 @@ export function Header() {
                             >
                                 Discover
                             </Link>
+                            {isInfluencer && (
+                                <Link
+                                    to="/campaigns"
+                                    className={`nav-link ${isActive("/campaigns") ? "nav-link-active" : ""}`}
+                                >
+                                    Campaigns
+                                </Link>
+                            )}
                             <Link
                                 to={profilePath}
                                 className={`nav-link ${isActive(profilePath) ? "nav-link-active" : ""}`}

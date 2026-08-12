@@ -13,6 +13,8 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
 
     public DbSet<Influencer> Influencers => Set<Influencer>();
     public DbSet<Brand> Brands => Set<Brand>();
+    public DbSet<Campaign> Campaigns => Set<Campaign>();
+    public DbSet<CampaignApplication> CampaignApplications => Set<CampaignApplication>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -31,7 +33,14 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
             .HasForeignKey<Brand>(b => b.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // ---- List<string> Categories stored as comma-separated text ----
+        // ---- Brand <-> Campaign (1:many) ----
+        builder.Entity<Campaign>()
+            .HasOne(c => c.Brand)
+            .WithMany()
+            .HasForeignKey(c => c.BrandId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // ---- List<string> Categories/Niches/Platforms stored as comma-separated text ----
         var stringListConverter = new ValueConverter<List<string>, string>(
             v => string.Join(',', v),
             v => v.Length == 0
@@ -47,5 +56,42 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
             .Property(i => i.Categories)
             .HasConversion(stringListConverter)
             .Metadata.SetValueComparer(stringListComparer);
+
+        builder.Entity<Campaign>()
+            .Property(c => c.Niches)
+            .HasConversion(stringListConverter)
+            .Metadata.SetValueComparer(stringListComparer);
+
+        builder.Entity<Campaign>()
+            .Property(c => c.Platforms)
+            .HasConversion(stringListConverter)
+            .Metadata.SetValueComparer(stringListComparer);
+
+        // ---- Campaign.Status enum stored as string ----
+        builder.Entity<Campaign>()
+            .Property(c => c.Status)
+            .HasConversion<string>();
+
+        // ---- Campaign <-> CampaignApplication (1:many) ----
+        builder.Entity<CampaignApplication>()
+            .HasOne(a => a.Campaign)
+            .WithMany()
+            .HasForeignKey(a => a.CampaignId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<CampaignApplication>()
+            .HasOne(a => a.Influencer)
+            .WithMany()
+            .HasForeignKey(a => a.InfluencerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // One application per influencer per campaign
+        builder.Entity<CampaignApplication>()
+            .HasIndex(a => new { a.CampaignId, a.InfluencerId })
+            .IsUnique();
+
+        builder.Entity<CampaignApplication>()
+            .Property(a => a.Status)
+            .HasConversion<string>();
     }
 }

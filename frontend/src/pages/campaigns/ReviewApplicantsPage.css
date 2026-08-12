@@ -1,0 +1,197 @@
+.ra-page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+}
+
+.ra-status {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 80px 32px;
+    font-family: var(--font-body);
+    color: var(--muted);
+}
+
+.ra-header {
+    padding: 48px 0 24px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 28px;
+}
+
+.ra-eyebrow {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 14px;
+}
+
+.ra-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 48px);
+    color: var(--ink);
+    margin: 0 0 12px;
+}
+
+.ra-subtitle {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.ra-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ra-card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.ra-card-identity {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+    min-width: 180px;
+}
+
+.ra-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    background: #e4e0d6 center / cover no-repeat;
+    flex-shrink: 0;
+}
+
+.ra-name {
+    font-family: var(--font-display);
+    font-size: 17px;
+    color: var(--ink);
+    text-decoration: none;
+    display: block;
+}
+
+    .ra-name:hover {
+        text-decoration: underline;
+    }
+
+.ra-handle {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 4px 0 0;
+}
+
+.ra-pitch {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 14.5px;
+    color: var(--ink);
+    line-height: 1.5;
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+}
+
+.ra-side {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.ra-asking {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.ra-asking-label {
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+.ra-asking-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--ink);
+}
+
+.ra-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.ra-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--rule-strong);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.ra-icon-btn-reject:hover {
+    border-color: #b3261e;
+    color: #b3261e;
+}
+
+.ra-icon-btn-accept {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+}
+
+    .ra-icon-btn-accept:hover {
+        opacity: 0.85;
+    }
+
+.ra-badge {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 6px 14px;
+    border-radius: 999px;
+}
+
+.ra-badge-accepted {
+    background: #e4f2e8;
+    color: #2f6b46;
+}
+
+.ra-badge-rejected {
+    background: #fdecea;
+    color: #b3261e;
+}
+
+@media (max-width: 800px) {
+    .ra-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ra-side {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

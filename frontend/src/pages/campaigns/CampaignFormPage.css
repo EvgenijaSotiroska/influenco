@@ -1,0 +1,213 @@
+.cf-page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cf-page-loading {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 80px 32px;
+    font-family: var(--font-body);
+    color: var(--muted);
+}
+
+.cf-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 48px 0 24px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cf-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 48px);
+    color: var(--ink);
+    margin: 0 0 10px;
+}
+
+.cf-subtitle {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--muted);
+    max-width: 55ch;
+    margin: 0;
+}
+
+.cf-error {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: #b3261e;
+    background: #fdecea;
+    border: 1px solid #f3c6c2;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cf-grid {
+    display: grid !important;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cf-card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow: 0 1px 2px rgba(20, 15, 10, 0.03);
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.cf-card-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 19px;
+    color: var(--ink);
+    margin: 0;
+}
+
+.cf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cf-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.cf-input {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--ink);
+    padding: 12px 14px;
+    border-radius: 7px;
+    border: 1px solid var(--rule-strong);
+    background: #fbfaf7;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+    .cf-input:focus {
+        border-color: var(--ink);
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(20, 15, 10, 0.06);
+    }
+
+.cf-textarea {
+    resize: vertical;
+    min-height: 130px;
+    font-family: var(--font-body);
+    line-height: 1.55;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.cf-pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cf-pill {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    padding: 9px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-strong);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.cf-pill-active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+}
+
+.cf-btn {
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--ink);
+    cursor: pointer;
+    transition: opacity 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
+}
+
+.cf-btn-solid {
+    background: var(--ink);
+    color: var(--cream);
+    width: 100%;
+}
+
+    .cf-btn-solid:hover {
+        opacity: 0.88;
+    }
+
+    .cf-btn-solid:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+.cf-btn-outline {
+    background: #fff;
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+    .cf-btn-outline:hover {
+        background: var(--cream);
+    }
+
+@media (max-width: 1100px) {
+    .cf-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .cf-card:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .cf-grid {
+        grid-template-columns: 1fr;
+    }
+}

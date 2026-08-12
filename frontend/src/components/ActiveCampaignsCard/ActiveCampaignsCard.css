@@ -1,0 +1,77 @@
+.active-campaigns-card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-top: 32px;
+}
+
+.active-campaigns-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 4px;
+}
+
+.active-campaigns-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--ink);
+    margin: 0;
+}
+
+.active-campaigns-manage {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+}
+
+    .active-campaigns-manage:hover {
+        text-decoration: underline;
+    }
+
+.active-campaigns-empty {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--muted);
+    padding: 20px 0;
+}
+
+.active-campaign-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    color: inherit;
+}
+
+    .active-campaign-row:last-child {
+        border-bottom: none;
+    }
+
+.active-campaign-title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14.5px;
+    color: var(--ink);
+    margin: 0 0 4px;
+}
+
+.active-campaign-meta {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.active-campaign-icon {
+    color: var(--muted);
+    flex-shrink: 0;
+}

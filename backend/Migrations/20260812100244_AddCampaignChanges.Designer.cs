@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using influenco.backend.Data;
 
@@ -11,9 +12,11 @@ using influenco.backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260812100244_AddCampaignChanges")]
+    partial class AddCampaignChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,47 +323,6 @@ namespace backend.Migrations
                     b.ToTable("Campaigns");
                 });
 
-            modelBuilder.Entity("influenco.backend.Models.CampaignApplication", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("BrandResponseMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CampaignId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("InfluencerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PitchMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("ProposedRate")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InfluencerId");
-
-                    b.HasIndex("CampaignId", "InfluencerId")
-                        .IsUnique();
-
-                    b.ToTable("CampaignApplications");
-                });
-
             modelBuilder.Entity("influenco.backend.Models.Influencer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -514,25 +476,6 @@ namespace backend.Migrations
                         .IsRequired();
 
                     b.Navigation("Brand");
-                });
-
-            modelBuilder.Entity("influenco.backend.Models.CampaignApplication", b =>
-                {
-                    b.HasOne("influenco.backend.Models.Campaign", "Campaign")
-                        .WithMany()
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("influenco.backend.Models.Influencer", "Influencer")
-                        .WithMany()
-                        .HasForeignKey("InfluencerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Campaign");
-
-                    b.Navigation("Influencer");
                 });
 
             modelBuilder.Entity("influenco.backend.Models.Influencer", b =>

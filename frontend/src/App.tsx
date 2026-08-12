@@ -12,6 +12,10 @@ import { InfluencerProfilePreviewPage } from "./pages/profile/Influencerprofilep
 import { BrandProfilePreviewPage } from "./pages/profile/BrandProfilePreviewPage.tsx";
 import { BrandProfilePage } from "./pages/profile/BrandProfilePage.tsx";
 import { DiscoverPage } from "./pages/discover/DiscoverPage.tsx";
+import { CampaignFormPage } from "./pages/campaigns/CampaignFormPage.tsx";
+import { CampaignsListPage } from "./pages/campaigns/CampaignsListPage.tsx";
+import { BrowseCampaignsPage } from "./pages/campaigns/BrowseCampaignsPage.tsx";
+import { ReviewApplicantsPage } from "./pages/campaigns/ReviewApplicantsPage.tsx";
 import "./App.css";
 
 function App() {
@@ -69,6 +73,42 @@ function App() {
                             element={
                                 <ProtectedRoute allowedRole="Brand">
                                     <Layout><BrandProfilePreviewPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/brand/campaigns"
+                            element={
+                                <ProtectedRoute allowedRole="Brand">
+                                    <Layout><CampaignsListPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/brand/campaigns/new"
+                            element={
+                                <ProtectedRoute allowedRole="Brand">
+                                    <Layout><CampaignFormPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/brand/campaigns/:id/edit"
+                            element={
+                                <ProtectedRoute allowedRole="Brand">
+                                    <Layout><CampaignFormPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/campaigns"
+                            element={<Layout><BrowseCampaignsPage /></Layout>}
+                        />
+                        <Route
+                            path="/brand/campaigns/:id/applicants"
+                            element={
+                                <ProtectedRoute allowedRole="Brand">
+                                    <Layout><ReviewApplicantsPage /></Layout>
                                 </ProtectedRoute>
                             }
                         />
