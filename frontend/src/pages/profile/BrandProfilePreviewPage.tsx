@@ -79,14 +79,20 @@ return (
             </div>
 
             {profile.website && (
-                <a
-                    href={websiteUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="brand-preview-website"
-                >
-                    {profile.website}
-                </a>
+                <div className="brand-preview-website-wrapper">
+                    <span className="brand-preview-website-label">
+                        Link to website:
+                    </span>
+
+                    <a
+                        href={websiteUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="brand-preview-website"
+                    >
+                        {profile.website}
+                    </a>
+                </div>
             )}
 
             {profile.description && (

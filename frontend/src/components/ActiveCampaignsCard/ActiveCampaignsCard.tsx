@@ -37,7 +37,7 @@ export function ActiveCampaignsCard() {
             {!loading &&
                 active.map((campaign) => (
                     <Link
-                        to={`/brand/campaigns/${campaign.id}/edit`}
+                        to={`/brand/campaigns/${campaign.id}/applicants`}
                         className="active-campaign-row"
                         key={campaign.id}
                     >

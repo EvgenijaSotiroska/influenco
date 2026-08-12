@@ -7,8 +7,12 @@ import "./InfluencerProfilePreviewPage.css";
 
 function formatNumber(count?: number): string {
     if (count === undefined) return "—";
-    if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M`;
-    if (count >= 1_000) return `${(count / 1_000).toFixed(0)}K`;
+    if (count >= 1_000_000) {
+        return `${(count / 1_000_000).toFixed(1)}M`;
+    }
+    if (count >= 1_000) {
+        return `${(count / 1_000).toFixed(0)}K`;
+    }
     return `${count}`;
 }
 
@@ -124,6 +128,7 @@ export function InfluencerProfilePreviewPage() {
     return (
         <div className="preview-page">
 
+            {/* COVER */}
             <div
                 className="preview-cover"
                 style={
@@ -148,9 +153,10 @@ export function InfluencerProfilePreviewPage() {
 
             <div className="preview-body">
 
+                {/* HEADER */}
                 <div className="preview-heading-row">
 
-                    <div>
+                    <div className="preview-heading-content">
                         <h1 className="preview-name">
                             {profile.displayName}
                         </h1>
@@ -162,25 +168,29 @@ export function InfluencerProfilePreviewPage() {
                         )}
                     </div>
 
-                    {!isViewingOther && (
-                        <div className="preview-actions">
+                    <div className="preview-actions">
+
+                        {isViewingOther ? (
+                            <button
+                                type="button"
+                                className="btn btn-solid preview-collaboration-btn"
+                            >
+                                Request collaboration
+                                <span>↗</span>
+                            </button>
+                        ) : (
                             <Link
                                 to="/profile/edit"
                                 className="btn btn-outline"
                             >
                                 Edit profile
                             </Link>
-                        </div>
-                    )}
+                        )}
 
+                    </div>
                 </div>
 
-                {profile.bio && (
-                    <p className="preview-bio">
-                        {profile.bio}
-                    </p>
-                )}
-
+                {/* STATS */}
                 <div className="preview-stats">
 
                     <div className="preview-stat">
@@ -236,66 +246,170 @@ export function InfluencerProfilePreviewPage() {
                     </p>
                 )}
 
-                {(profile.instagramFollowers !== undefined ||
-                    profile.tikTokFollowers !== undefined) && (
+                {/* ABOUT + SOCIAL PRESENCE */}
+                <div className="preview-main-content">
 
-                        <div className="preview-platforms">
+                    {/* ABOUT */}
+                    {profile.bio && (
+                        <section className="preview-about">
 
-                            {profile.instagramFollowers !== undefined && (
-                                <a
-                                    href={profile.instagramUrl || "#"}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="preview-platform-card"
-                                >
-                                    <span className="preview-platform-name">
-                                        Instagram
-                                    </span>
+                            <p className="preview-section-label">
+                                ABOUT
+                            </p>
 
-                                    <span className="preview-platform-followers">
-                                        {formatNumber(
-                                            profile.instagramFollowers
-                                        )} followers
-                                    </span>
+                            <div className="preview-about-content">
+                                <p className="preview-about-quote">
+                                    "{profile.bio}"
+                                </p>
+                            </div>
 
-                                    {profile.instagramEngagementRate !== undefined && (
-                                        <span className="preview-platform-er">
-                                            {profile.instagramEngagementRate}% ER
-                                        </span>
-                                    )}
-                                </a>
-                            )}
-
-                            {profile.tikTokFollowers !== undefined && (
-                                <a
-                                    href={profile.tikTokUrl || "#"}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="preview-platform-card"
-                                >
-                                    <span className="preview-platform-name">
-                                        TikTok
-                                    </span>
-
-                                    <span className="preview-platform-followers">
-                                        {formatNumber(
-                                            profile.tikTokFollowers
-                                        )} followers
-                                    </span>
-
-                                    {profile.tikTokEngagementRate !== undefined && (
-                                        <span className="preview-platform-er">
-                                            {profile.tikTokEngagementRate}% ER
-                                        </span>
-                                    )}
-                                </a>
-                            )}
-
-                        </div>
+                        </section>
                     )}
 
-                {hasAudienceInfo && (
+                    {/* SOCIAL PRESENCE */}
+                    {(profile.instagramFollowers !== undefined ||
+                        profile.tikTokFollowers !== undefined) && (
 
+                            <section className="preview-social">
+
+                                <div className="preview-social-header">
+                                    <p className="preview-section-label">
+                                        SOCIAL PRESENCE
+                                    </p>
+
+                                    {profile.statsUpdatedAt && (
+                                        <p className="preview-updated">
+                                            Self-reported · Last updated{" "}
+                                            {new Date(
+                                                profile.statsUpdatedAt
+                                            ).toLocaleDateString()}
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="preview-platforms">
+
+                                    {profile.instagramFollowers !== undefined && (
+                                        <a
+                                            href={profile.instagramUrl || "#"}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="preview-platform-card"
+                                        >
+                                            <div className="preview-platform-top">
+                                                <span className="preview-platform-name">
+                                                    Instagram
+                                                </span>
+
+                                                <span className="preview-platform-handle">
+                                                    {profile.instagramUrl
+                                                        ? profile.instagramUrl
+                                                            .split("/")
+                                                            .filter(Boolean)
+                                                            .pop()
+                                                            ? `@${profile.instagramUrl
+                                                                .split("/")
+                                                                .filter(Boolean)
+                                                                .pop()}`
+                                                            : ""
+                                                        : ""}
+                                                </span>
+                                            </div>
+
+                                            <div className="preview-platform-data">
+                                                <div>
+                                                    <span className="preview-platform-number">
+                                                        {formatNumber(
+                                                            profile.instagramFollowers
+                                                        )}
+                                                    </span>
+
+                                                    <span className="preview-platform-label">
+                                                        Followers
+                                                    </span>
+                                                </div>
+
+                                                <div>
+                                                    <span className="preview-platform-number">
+                                                        {profile.instagramEngagementRate !== undefined
+                                                            ? profile.instagramEngagementRate
+                                                            : "—"}
+                                                        <small>%</small>
+                                                    </span>
+
+                                                    <span className="preview-platform-label">
+                                                        Engagement
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    )}
+
+                                    {profile.tikTokFollowers !== undefined && (
+                                        <a
+                                            href={profile.tikTokUrl || "#"}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="preview-platform-card"
+                                        >
+                                            <div className="preview-platform-top">
+                                                <span className="preview-platform-name">
+                                                    TikTok
+                                                </span>
+
+                                                <span className="preview-platform-handle">
+                                                    {profile.tikTokUrl
+                                                        ? profile.tikTokUrl
+                                                            .split("/")
+                                                            .filter(Boolean)
+                                                            .pop()
+                                                            ? `@${profile.tikTokUrl
+                                                                .split("/")
+                                                                .filter(Boolean)
+                                                                .pop()}`
+                                                            : ""
+                                                        : ""}
+                                                </span>
+                                            </div>
+
+                                            <div className="preview-platform-data">
+                                                <div>
+                                                    <span className="preview-platform-number">
+                                                        {formatNumber(
+                                                            profile.tikTokFollowers
+                                                        )}
+                                                    </span>
+
+                                                    <span className="preview-platform-label">
+                                                        Followers
+                                                    </span>
+                                                </div>
+
+                                                <div>
+                                                    <span className="preview-platform-number">
+                                                        {profile.tikTokEngagementRate !== undefined
+                                                            ? profile.tikTokEngagementRate
+                                                            : "—"}
+                                                        <small>%</small>
+                                                    </span>
+
+                                                    <span className="preview-platform-label">
+                                                        Engagement
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    )}
+
+                                </div>
+
+                            </section>
+                        )}
+
+                </div>
+
+                {/* AUDIENCE */}
+                {hasAudienceInfo && (
                     <div className="preview-audience">
 
                         <h2 className="preview-section-title">
@@ -346,7 +460,6 @@ export function InfluencerProfilePreviewPage() {
                 )}
 
             </div>
-
         </div>
     );
 }
