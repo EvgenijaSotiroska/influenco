@@ -1,6 +1,7 @@
 export interface InfluencerProfile {
     id: string;
     displayName: string;
+    email: string;
     handle: string;
     bio?: string;
     profilePictureUrl?: string;

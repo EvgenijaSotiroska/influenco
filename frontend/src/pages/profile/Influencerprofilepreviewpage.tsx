@@ -1,30 +1,36 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useInfluencerProfile from "../../hooks/useInfluencerProfile";
+import useAuth from "../../hooks/useAuth";
 import influencerApi from "../../api/influencerApi";
 import type { InfluencerProfile } from "../../api/types/influencer";
 import "./InfluencerProfilePreviewPage.css";
 
 function formatNumber(count?: number): string {
     if (count === undefined) return "—";
+
     if (count >= 1_000_000) {
         return `${(count / 1_000_000).toFixed(1)}M`;
     }
+
     if (count >= 1_000) {
         return `${(count / 1_000).toFixed(0)}K`;
     }
+
     return `${count}`;
 }
 
 export function InfluencerProfilePreviewPage() {
     const { id } = useParams<{ id?: string }>();
+    const { user } = useAuth();
 
     const ownProfileHook = useInfluencerProfile();
 
     const [otherProfile, setOtherProfile] =
         useState<InfluencerProfile | null>(null);
 
-    const [otherLoading, setOtherLoading] = useState(!!id);
+    const [otherLoading, setOtherLoading] =
+        useState(!!id);
 
     const [otherError, setOtherError] =
         useState<string | null>(null);
@@ -113,17 +119,17 @@ export function InfluencerProfilePreviewPage() {
         );
     }
 
+    const isOwner =
+        !!user?.email &&
+        !!profile.email &&
+        user.email.toLowerCase() === profile.email.toLowerCase();
+
     const locationAndCategories = [
         profile.location,
         profile.categories?.join(" / "),
     ]
         .filter(Boolean)
         .join(" · ");
-
-    const hasAudienceInfo =
-        profile.audienceAgeRange ||
-        profile.audienceTopLocations ||
-        profile.audienceGenderSplit;
 
     return (
         <div className="preview-page">
@@ -170,7 +176,14 @@ export function InfluencerProfilePreviewPage() {
 
                     <div className="preview-actions">
 
-                        {isViewingOther ? (
+                        {isOwner ? (
+                            <Link
+                                to="/profile/edit"
+                                className="btn btn-outline"
+                            >
+                                Edit profile
+                            </Link>
+                        ) : (
                             <button
                                 type="button"
                                 className="btn btn-solid preview-collaboration-btn"
@@ -178,13 +191,6 @@ export function InfluencerProfilePreviewPage() {
                                 Request collaboration
                                 <span>↗</span>
                             </button>
-                        ) : (
-                            <Link
-                                to="/profile/edit"
-                                className="btn btn-outline"
-                            >
-                                Edit profile
-                            </Link>
                         )}
 
                     </div>
@@ -237,7 +243,7 @@ export function InfluencerProfilePreviewPage() {
 
                 </div>
 
-                {profile.statsUpdatedAt && !isViewingOther && (
+                {profile.statsUpdatedAt && isOwner && (
                     <p className="preview-stats-note">
                         Self-reported · updated{" "}
                         {new Date(
@@ -252,7 +258,6 @@ export function InfluencerProfilePreviewPage() {
                     {/* ABOUT */}
                     {profile.bio && (
                         <section className="preview-about">
-
                             <p className="preview-section-label">
                                 ABOUT
                             </p>
@@ -262,14 +267,12 @@ export function InfluencerProfilePreviewPage() {
                                     "{profile.bio}"
                                 </p>
                             </div>
-
                         </section>
                     )}
 
                     {/* SOCIAL PRESENCE */}
                     {(profile.instagramFollowers !== undefined ||
                         profile.tikTokFollowers !== undefined) && (
-
                             <section className="preview-social">
 
                                 <div className="preview-social-header">
@@ -287,116 +290,130 @@ export function InfluencerProfilePreviewPage() {
                                     )}
                                 </div>
 
-                                <div className="preview-platforms">
+                                <div className="preview-platforms-box">
 
+                                    {/* INSTAGRAM */}
                                     {profile.instagramFollowers !== undefined && (
                                         <a
-                                            href={profile.instagramUrl || "#"}
+                                            href={
+                                                profile.instagramUrl || "#"
+                                            }
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="preview-platform-card"
+                                            className="preview-platform-col"
                                         >
                                             <div className="preview-platform-top">
-                                                <span className="preview-platform-name">
+                                                <span className="preview-platform-brand">
                                                     Instagram
+                                                    <span className="verified-badge">
+                                                        ✓
+                                                    </span>
                                                 </span>
 
                                                 <span className="preview-platform-handle">
                                                     {profile.instagramUrl
-                                                        ? profile.instagramUrl
+                                                        ? `@${profile.instagramUrl
                                                             .split("/")
                                                             .filter(Boolean)
-                                                            .pop()
-                                                            ? `@${profile.instagramUrl
-                                                                .split("/")
-                                                                .filter(Boolean)
-                                                                .pop()}`
-                                                            : ""
+                                                            .pop()}`
                                                         : ""}
                                                 </span>
                                             </div>
 
-                                            <div className="preview-platform-data">
-                                                <div>
-                                                    <span className="preview-platform-number">
+                                            <div className="preview-platform-stats">
+
+                                                <div className="preview-stat-item">
+                                                    <span className="preview-num">
                                                         {formatNumber(
                                                             profile.instagramFollowers
                                                         )}
                                                     </span>
 
-                                                    <span className="preview-platform-label">
+                                                    <span className="preview-lbl">
                                                         Followers
                                                     </span>
+
+                                                    <div className="preview-bar preview-bar-dark" />
                                                 </div>
 
-                                                <div>
-                                                    <span className="preview-platform-number">
-                                                        {profile.instagramEngagementRate !== undefined
-                                                            ? profile.instagramEngagementRate
-                                                            : "—"}
-                                                        <small>%</small>
+                                                <div className="preview-stat-item">
+                                                    <span className="preview-num">
+                                                        {profile.instagramEngagementRate ?? "—"}
+                                                        <span className="percent-symbol">
+                                                            %
+                                                        </span>
                                                     </span>
 
-                                                    <span className="preview-platform-label">
+                                                    <span className="preview-lbl">
                                                         Engagement
                                                     </span>
+
+                                                    <div className="preview-bar preview-bar-light" />
                                                 </div>
+
                                             </div>
                                         </a>
                                     )}
 
+                                    {/* TIKTOK */}
                                     {profile.tikTokFollowers !== undefined && (
                                         <a
-                                            href={profile.tikTokUrl || "#"}
+                                            href={
+                                                profile.tikTokUrl || "#"
+                                            }
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="preview-platform-card"
+                                            className="preview-platform-col"
                                         >
                                             <div className="preview-platform-top">
-                                                <span className="preview-platform-name">
+                                                <span className="preview-platform-brand">
                                                     TikTok
+                                                    <span className="verified-badge">
+                                                        ✓
+                                                    </span>
                                                 </span>
 
                                                 <span className="preview-platform-handle">
                                                     {profile.tikTokUrl
-                                                        ? profile.tikTokUrl
+                                                        ? `@${profile.tikTokUrl
                                                             .split("/")
                                                             .filter(Boolean)
-                                                            .pop()
-                                                            ? `@${profile.tikTokUrl
-                                                                .split("/")
-                                                                .filter(Boolean)
-                                                                .pop()}`
-                                                            : ""
+                                                            .pop()}`
                                                         : ""}
                                                 </span>
                                             </div>
 
-                                            <div className="preview-platform-data">
-                                                <div>
-                                                    <span className="preview-platform-number">
+                                            <div className="preview-platform-stats">
+
+                                                <div className="preview-stat-item">
+                                                    <span className="preview-num">
                                                         {formatNumber(
                                                             profile.tikTokFollowers
                                                         )}
                                                     </span>
 
-                                                    <span className="preview-platform-label">
+                                                    <span className="preview-lbl">
                                                         Followers
                                                     </span>
+
+                                                    <div className="preview-bar preview-bar-dark" />
                                                 </div>
 
-                                                <div>
-                                                    <span className="preview-platform-number">
-                                                        {profile.tikTokEngagementRate !== undefined
-                                                            ? profile.tikTokEngagementRate
-                                                            : "—"}
-                                                        <small>%</small>
+                                                <div className="preview-stat-item">
+                                                    <span className="preview-num">
+                                                        {profile.tikTokEngagementRate ?? "—"}
+                                                        <span className="percent-symbol">
+                                                            %
+                                                        </span>
                                                     </span>
 
-                                                    <span className="preview-platform-label">
+                                                    <span className="preview-lbl">
                                                         Engagement
                                                     </span>
+
+                                                    <div className="preview-bar preview-bar-light" />
                                                 </div>
+
                                             </div>
                                         </a>
                                     )}
@@ -408,58 +425,8 @@ export function InfluencerProfilePreviewPage() {
 
                 </div>
 
-                {/* AUDIENCE */}
-                {hasAudienceInfo && (
-                    <div className="preview-audience">
-
-                        <h2 className="preview-section-title">
-                            Audience
-                        </h2>
-
-                        <div className="preview-audience-grid">
-
-                            {profile.audienceAgeRange && (
-                                <div>
-                                    <span className="preview-audience-label">
-                                        Age range
-                                    </span>
-
-                                    <span className="preview-audience-value">
-                                        {profile.audienceAgeRange}
-                                    </span>
-                                </div>
-                            )}
-
-                            {profile.audienceGenderSplit && (
-                                <div>
-                                    <span className="preview-audience-label">
-                                        Gender split
-                                    </span>
-
-                                    <span className="preview-audience-value">
-                                        {profile.audienceGenderSplit}
-                                    </span>
-                                </div>
-                            )}
-
-                            {profile.audienceTopLocations && (
-                                <div>
-                                    <span className="preview-audience-label">
-                                        Top locations
-                                    </span>
-
-                                    <span className="preview-audience-value">
-                                        {profile.audienceTopLocations}
-                                    </span>
-                                </div>
-                            )}
-
-                        </div>
-
-                    </div>
-                )}
-
             </div>
+
         </div>
     );
 }

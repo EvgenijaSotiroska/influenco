@@ -18,6 +18,7 @@ public class InfluencerService : IInfluencerService
     {
         var influencer = await _context.Influencers
             .AsNoTracking()
+            .Include(i => i.AppUser)
             .FirstOrDefaultAsync(i => i.AppUserId == userId);
 
         if (influencer == null)
@@ -30,6 +31,7 @@ public class InfluencerService : IInfluencerService
     {
         var influencer = await _context.Influencers
             .AsNoTracking()
+            .Include(i => i.AppUser)
             .FirstOrDefaultAsync(i => i.Id == influencerId);
 
         if (influencer == null)
@@ -145,6 +147,7 @@ public class InfluencerService : IInfluencerService
         {
             Id = influencer.Id,
             DisplayName = influencer.DisplayName,
+            Email = influencer.AppUser.Email ?? "",
             Handle = influencer.Handle,
             Bio = influencer.Bio,
             ProfilePictureUrl = influencer.ProfilePictureUrl,
