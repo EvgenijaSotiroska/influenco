@@ -5,6 +5,7 @@ import useAuth from "../../hooks/useAuth";
 import influencerApi from "../../api/influencerApi";
 import type { InfluencerProfile } from "../../api/types/influencer";
 import "./InfluencerProfilePreviewPage.css";
+import { CollaborationRequestModal } from "../../components/CollaborationRequestModal/CollaborationRequestModal";
 
 function formatNumber(count?: number): string {
     if (count === undefined) return "—";
@@ -25,6 +26,7 @@ export function InfluencerProfilePreviewPage() {
     const { user } = useAuth();
 
     const ownProfileHook = useInfluencerProfile();
+    const [showCollabModal, setShowCollabModal] = useState(false);
 
     const [otherProfile, setOtherProfile] =
         useState<InfluencerProfile | null>(null);
@@ -184,13 +186,14 @@ export function InfluencerProfilePreviewPage() {
                                 Edit profile
                             </Link>
                         ) : (
-                            <button
-                                type="button"
-                                className="btn btn-solid preview-collaboration-btn"
-                            >
-                                Request collaboration
-                                <span>↗</span>
-                            </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-solid preview-collaboration-btn"
+                                    onClick={() => setShowCollabModal(true)}
+                                >
+                                    Request collaboration
+                                    <span>↗</span>
+                                </button>
                         )}
 
                     </div>
@@ -426,7 +429,13 @@ export function InfluencerProfilePreviewPage() {
                 </div>
 
             </div>
-
+            {showCollabModal && profile && (
+                <CollaborationRequestModal
+                    influencerId={profile.id}
+                    influencerName={profile.displayName}
+                    onClose={() => setShowCollabModal(false)}
+                />
+            )}
         </div>
     );
 }

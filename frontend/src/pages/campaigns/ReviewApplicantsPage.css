@@ -184,6 +184,24 @@
     color: #b3261e;
 }
 
+.ra-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ra-badge-pending {
+    background: var(--cream);
+    color: var(--muted);
+}
+
+.ra-badge-declined {
+    background: #fdecea;
+    color: #b3261e;
+}
+
 @media (max-width: 800px) {
     .ra-card {
         flex-direction: column;

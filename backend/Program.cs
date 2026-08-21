@@ -45,6 +45,7 @@ builder.Services.AddScoped<IInfluencerService, InfluencerService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<ICampaignApplicationService, CampaignApplicationService>();
+builder.Services.AddScoped<ICollaborationRequestService, CollaborationRequestService>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()!;
 

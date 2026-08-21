@@ -1,6 +1,7 @@
 import axios from "../axios/axios";
 import type { Campaign, CampaignSummary, CampaignFormData } from "./types/campaign";
 import type { CampaignApplicants, RespondToApplicationRequest } from "./types/applicant";
+import type { RequestedInfluencer } from "./types/incomingRequests";
 
 const campaignApi = {
     async create(data: CampaignFormData): Promise<Campaign> {
@@ -36,6 +37,11 @@ const campaignApi = {
         data: RespondToApplicationRequest
     ) {
         await axios.put(`/campaigns/${campaignId}/applicants/${applicationId}`, data);
+    },
+
+    async getRequestedInfluencers(campaignId: string): Promise<RequestedInfluencer[]> {
+        const response = await axios.get(`/campaigns/${campaignId}/requested-influencers`);
+        return response.data;
     },
 };
 

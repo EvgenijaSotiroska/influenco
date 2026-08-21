@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useBrowseCampaigns from "../../hooks/useBrowseCampaigns";
 import { ApplyModal } from "../../components/ApplyModal/ApplyModal";
 import type { BrowseCampaignsFilters } from "../../api/types/browseCampaign";
 import "./BrowseCampaignsPage.css";
+import usePendingRequestsCount from "../../hooks/usePendingRequestsCount";
 
 const NICHE_OPTIONS = ["Travel", "Fashion", "Food", "Beauty", "Tech", "Fitness", "Outdoor", "Lifestyle"];
 
@@ -25,6 +27,7 @@ export function BrowseCampaignsPage() {
     const { isLoggedIn } = useAuth();
     const [activeNiche, setActiveNiche] = useState<string | null>(null);
     const [applyTarget, setApplyTarget] = useState<{ id: string; title: string } | null>(null);
+    const pendingCount = usePendingRequestsCount();
 
     const filters: BrowseCampaignsFilters = activeNiche ? { niche: activeNiche } : {};
     const { campaigns, loading, error, reload } = useBrowseCampaigns(filters);
@@ -32,12 +35,26 @@ export function BrowseCampaignsPage() {
     return (
         <div className="bc-page">
             <section className="bc-hero">
-                <span className="bc-eyebrow">OPPORTUNITIES</span>
-                <h1 className="bc-title">Browse campaigns.</h1>
-                <p className="bc-subtitle">
-                    Structured briefs from brands and agencies. Filter by niche,
-                    platform, and budget. Apply with your rate and pitch.
-                </p>
+                <div className="bc-hero-top">
+                    <div>
+                        <span className="bc-eyebrow">OPPORTUNITIES</span>
+                        <h1 className="bc-title">Browse campaigns.</h1>
+                        <p className="bc-subtitle">
+                            Structured briefs from brands and agencies. Filter by niche,
+                            platform, and budget. Apply with your rate and pitch.
+                        </p>
+                    </div>
+
+                    <div className="bc-hero-actions">
+                        <Link to="/campaigns/my-applications" className="btn btn-outline">
+                            My applications
+                        </Link>
+                        <Link to="/campaigns/requests" className="btn btn-outline bc-requests-link">
+                            Requests
+                            {pendingCount > 0 && <span className="bc-badge">{pendingCount}</span>}
+                        </Link>
+                    </div>
+                </div>
             </section>
 
             <section className="bc-niche-bar">

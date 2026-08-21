@@ -43,4 +43,12 @@ public class BrowseCampaignsController : ControllerBase
 
         return Guid.Parse(userId);
     }
+
+    [HttpGet("my-applications")]
+    [Authorize(Roles = "Influencer")]
+    public async Task<ActionResult<List<MyApplicationResponse>>> GetMyApplications()
+    {
+        var result = await _service.GetMyApplicationsAsync(GetUserId());
+        return Ok(result);
+    }
 }

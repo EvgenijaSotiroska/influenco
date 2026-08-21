@@ -8,4 +8,5 @@ public interface ICampaignApplicationService
     Task ApplyAsync(Guid influencerAppUserId, Guid campaignId, ApplyToCampaignRequest request);
     Task<CampaignApplicantsResponse> GetApplicantsAsync(Guid brandAppUserId, Guid campaignId);
     Task RespondToApplicationAsync(Guid brandAppUserId, Guid campaignId, Guid applicationId, RespondToApplicationRequest request);
+    Task<List<MyApplicationResponse>> GetMyApplicationsAsync(Guid influencerAppUserId);
 }

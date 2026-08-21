@@ -16,6 +16,8 @@ import { CampaignFormPage } from "./pages/campaigns/CampaignFormPage.tsx";
 import { CampaignsListPage } from "./pages/campaigns/CampaignsListPage.tsx";
 import { BrowseCampaignsPage } from "./pages/campaigns/BrowseCampaignsPage.tsx";
 import { ReviewApplicantsPage } from "./pages/campaigns/ReviewApplicantsPage.tsx";
+import { MyApplicationsPage } from "./pages/campaigns/MyApplicationsPage.tsx";
+import { MyRequestsPage } from "./pages/campaigns/MyRequestsPage.tsx";
 import "./App.css";
 
 function App() {
@@ -109,6 +111,22 @@ function App() {
                             element={
                                 <ProtectedRoute allowedRole="Brand">
                                     <Layout><ReviewApplicantsPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/campaigns/my-applications"
+                            element={
+                                <ProtectedRoute allowedRole="Influencer">
+                                    <Layout><MyApplicationsPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/campaigns/requests"
+                            element={
+                                <ProtectedRoute allowedRole="Influencer">
+                                    <Layout><MyRequestsPage /></Layout>
                                 </ProtectedRoute>
                             }
                         />

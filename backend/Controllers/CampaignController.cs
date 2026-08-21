@@ -13,11 +13,13 @@ public class CampaignController : ControllerBase
 {
     private readonly ICampaignService _service;
     private readonly ICampaignApplicationService _applicationService;
+    private readonly ICollaborationRequestService _collaborationRequestService;
 
-    public CampaignController(ICampaignService service, ICampaignApplicationService applicationService)
+    public CampaignController(ICampaignService service, ICampaignApplicationService applicationService, ICollaborationRequestService collaborationRequestService)
     {
         _service = service;
         _applicationService = applicationService;
+        _collaborationRequestService = collaborationRequestService;
     }
 
     [HttpPost]
@@ -78,5 +80,12 @@ public class CampaignController : ControllerBase
     {
         await _applicationService.RespondToApplicationAsync(GetUserId(), id, applicationId, request);
         return NoContent();
+    }
+
+    [HttpGet("{id}/requested-influencers")]
+    public async Task<ActionResult<List<RequestedInfluencerResponse>>> GetRequestedInfluencers(Guid id)
+    {
+        var result = await _collaborationRequestService.GetRequestedInfluencersForCampaignAsync(GetUserId(), id);
+        return Ok(result);
     }
 }

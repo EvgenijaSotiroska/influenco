@@ -210,4 +210,34 @@ public class CampaignApplicationService : ICampaignApplicationService
 
         return Math.Round((double)avgViews / followers.Value * 100, 2);
     }
+
+    public async Task<List<MyApplicationResponse>> GetMyApplicationsAsync(Guid influencerAppUserId)
+    {
+        var influencer = await _context.Influencers
+            .FirstOrDefaultAsync(i => i.AppUserId == influencerAppUserId);
+
+        if (influencer == null)
+            throw new Exception("Influencer profile not found.");
+
+        return await _context.CampaignApplications
+            .AsNoTracking()
+            .Include(a => a.Campaign)
+            .ThenInclude(c => c.Brand)
+            .Where(a => a.InfluencerId == influencer.Id)
+            .OrderByDescending(a => a.CreatedAt)
+            .Select(a => new MyApplicationResponse
+            {
+                ApplicationId = a.Id,
+                CampaignId = a.Campaign.Id,
+                CampaignTitle = a.Campaign.Title,
+                BrandName = a.Campaign.Brand.CompanyName,
+                BrandLogoUrl = a.Campaign.Brand.LogoUrl,
+                PitchMessage = a.PitchMessage,
+                ProposedRate = a.ProposedRate,
+                Status = a.Status.ToString(),
+                BrandResponseMessage = a.BrandResponseMessage,
+                CreatedAt = a.CreatedAt
+            })
+            .ToListAsync();
+    }
 }
