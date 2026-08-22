@@ -62,18 +62,6 @@ export function Header() {
                             >
                                 Discover
                             </Link>
-                            <Link
-                                to="/for-brands"
-                                className={`nav-link ${isActive("/for-brands") ? "nav-link-active" : ""}`}
-                            >
-                                For brands
-                            </Link>
-                            <Link
-                                to="/for-creators"
-                                className={`nav-link ${isActive("/for-creators") ? "nav-link-active" : ""}`}
-                            >
-                                For creators
-                            </Link>
                         </>
                     )}
                 </nav>

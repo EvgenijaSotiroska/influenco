@@ -8,4 +8,7 @@ public class GetBrandProfileResponse
     public string? LogoUrl { get; set; }
     public string? Website { get; set; }
     public string? Industry { get; set; }
+    public string Email { get; set; } = null!;
+    public int ActiveCampaignsCount { get; set; }
+    public int DealsCount { get; set; }
 }

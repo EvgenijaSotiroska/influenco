@@ -20,6 +20,7 @@ export interface CampaignSummary {
     title: string;
     applicantsCount: number;
     applicationDeadline?: string;
+    budget?: number;
     status: CampaignStatus;
 }
 

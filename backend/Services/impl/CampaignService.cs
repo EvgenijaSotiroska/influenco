@@ -50,6 +50,7 @@ public class CampaignService : ICampaignService
             {
                 Id = c.Id,
                 Title = c.Title,
+                Budget = c.Budget,
                 ApplicantsCount = c.ApplicantsCount,
                 ApplicationDeadline = c.ApplicationDeadline,
                 Status = c.Status.ToString()

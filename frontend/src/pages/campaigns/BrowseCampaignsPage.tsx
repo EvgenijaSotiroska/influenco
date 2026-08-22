@@ -23,6 +23,11 @@ function formatDate(dateStr?: string): string {
     })}`;
 }
 
+function isCampaignClosed(applicationDeadline?: string): boolean {
+    if (!applicationDeadline) return false;
+    return new Date(applicationDeadline).getTime() < Date.now();
+}
+
 export function BrowseCampaignsPage() {
     const { isLoggedIn } = useAuth();
     const [activeNiche, setActiveNiche] = useState<string | null>(null);
@@ -88,71 +93,86 @@ export function BrowseCampaignsPage() {
 
                 {!loading &&
                     !error &&
-                    campaigns.map((campaign) => (
-                        <div className="bc-card" key={campaign.id}>
-                            <div className="bc-card-main">
-                                <div className="bc-card-brand-row">
-                                    <span className="bc-card-brand">{campaign.brandName.toUpperCase()}</span>
-                                    <span className="bc-card-badge">OPEN</span>
-                                </div>
+                    campaigns.map((campaign) => {
+                        const closed = isCampaignClosed(campaign.applicationDeadline);
 
-                                <h2 className="bc-card-title">{campaign.title}</h2>
-
-                                {campaign.description && (
-                                    <p className="bc-card-description">{campaign.description}</p>
-                                )}
-
-                                <div className="bc-card-tags">
-                                    {campaign.niches.map((n) => (
-                                        <span className="bc-tag" key={n}>
-                                            {n}
-                                        </span>
-                                    ))}
-                                    {campaign.platforms.map((p) => (
-                                        <span className="bc-tag bc-tag-muted" key={p}>
-                                            {p}
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="bc-card-side">
-                                <span className="bc-card-budget">{formatBudget(campaign.budget)}</span>
-
-                                {campaign.minimumFollowers && (
-                                    <span className="bc-card-meta">
-                                        Min {campaign.minimumFollowers.toLocaleString()} followers
-                                    </span>
-                                )}
-
-                                <span className="bc-card-meta">{formatDate(campaign.applicationDeadline)}</span>
-
-                                <div className="bc-card-actions">
-                                    <span className="bc-card-applicants">
-                                        {campaign.applicantsCount} applied
-                                    </span>
-
-                                    {campaign.hasApplied ? (
-                                        <button type="button" className="bc-applied-btn" disabled>
-                                            Applied ✓
-                                        </button>
-                                    ) : (
-                                        <button
-                                            type="button"
-                                            className="bc-apply-btn"
-                                            onClick={() =>
-                                                isLoggedIn
-                                                    ? setApplyTarget({ id: campaign.id, title: campaign.title })
-                                                    : (window.location.href = "/login")
-                                            }
+                        return (
+                            <div className="bc-card" key={campaign.id}>
+                                <div className="bc-card-main">
+                                    <div className="bc-card-brand-row">
+                                        <Link
+                                            to={`/brand/profile/preview/${campaign.brandId}`}
+                                            className="bc-card-brand-link"
                                         >
-                                            Apply ↗
-                                        </button>
+                                            {campaign.brandName.toUpperCase()}
+                                        </Link>
+                                        <span className={`bc-card-badge ${closed ? "bc-card-badge-closed" : ""}`}>
+                                            {closed ? "CLOSED" : "OPEN"}
+                                        </span>
+                                    </div>
+
+                                    <h2 className="bc-card-title">{campaign.title}</h2>
+
+                                    {campaign.description && (
+                                        <p className="bc-card-description">{campaign.description}</p>
                                     )}
+
+                                    <div className="bc-card-tags">
+                                        {campaign.niches.map((n) => (
+                                            <span className="bc-tag" key={n}>
+                                                {n}
+                                            </span>
+                                        ))}
+                                        {campaign.platforms.map((p) => (
+                                            <span className="bc-tag bc-tag-muted" key={p}>
+                                                {p}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="bc-card-side">
+                                    <span className="bc-card-budget">{formatBudget(campaign.budget)}</span>
+
+                                    {campaign.minimumFollowers && (
+                                        <span className="bc-card-meta">
+                                            Min {campaign.minimumFollowers.toLocaleString()} followers
+                                        </span>
+                                    )}
+
+                                    <span className="bc-card-meta">{formatDate(campaign.applicationDeadline)}</span>
+
+                                    <div className="bc-card-actions">
+                                        <span className="bc-card-applicants">
+                                            {campaign.applicantsCount} applied
+                                        </span>
+
+                                        {campaign.hasApplied ? (
+                                            <button type="button" className="bc-applied-btn" disabled>
+                                                Applied ✓
+                                            </button>
+                                        ) : closed ? (
+                                            <button type="button" className="bc-applied-btn" disabled>
+                                                Closed
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                className="bc-apply-btn"
+                                                onClick={() =>
+                                                    isLoggedIn
+                                                        ? setApplyTarget({ id: campaign.id, title: campaign.title })
+                                                        : (window.location.href = "/login")
+                                                }
+                                            >
+                                                Apply ↗
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
             </section>
 
             {applyTarget && (

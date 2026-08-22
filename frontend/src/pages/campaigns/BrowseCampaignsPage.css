@@ -255,7 +255,22 @@
     padding: 0 4px;
     line-height: 1;
 }
+.bc-card-brand-link {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-decoration: none;
+}
 
+    .bc-card-brand-link:hover {
+        text-decoration: underline;
+    }
+
+.bc-card-badge-closed {
+    color: var(--muted);
+    background: var(--cream);
+}
 @media (max-width: 760px) {
     .bc-card {
         flex-direction: column;

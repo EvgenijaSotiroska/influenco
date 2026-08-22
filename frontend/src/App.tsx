@@ -80,6 +80,14 @@ function App() {
                             }
                         />
                         <Route
+                            path="/brand/profile/preview/:id"
+                            element={
+                                <ProtectedRoute>
+                                    <Layout><BrandProfilePreviewPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
                             path="/brand/campaigns"
                             element={
                                 <ProtectedRoute allowedRole="Brand">

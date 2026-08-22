@@ -11,10 +11,18 @@ function formatDate(dateStr?: string): string {
     })}`;
 }
 
+function isPastDeadline(dateStr?: string): boolean {
+    if (!dateStr) return false;
+    return new Date(dateStr).getTime() < Date.now();
+}
+
 export function ActiveCampaignsCard() {
     const { campaigns, loading } = useCampaigns();
 
-    const active = campaigns.filter((c) => c.status !== "Closed").slice(0, 5);
+    const active = campaigns
+        .filter((c) => c.status !== "Closed")
+        .filter((c) => !isPastDeadline(c.applicationDeadline))
+        .slice(0, 5);
 
     return (
         <div className="active-campaigns-card">

@@ -64,6 +64,7 @@ public class CampaignApplicationService : ICampaignApplicationService
             Id = c.Id,
             BrandName = c.Brand.CompanyName,
             BrandLogoUrl = c.Brand.LogoUrl,
+            BrandId = c.Brand.Id,
             Title = c.Title,
             Description = c.Description,
             Budget = c.Budget,

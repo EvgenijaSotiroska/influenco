@@ -5,6 +5,9 @@ export interface BrandProfile {
     logoUrl?: string;
     website?: string;
     industry?: string;
+    email: string;
+    activeCampaignsCount: number;
+    dealsCount: number;
 }
 
 export interface UpdateBrandProfileRequest {

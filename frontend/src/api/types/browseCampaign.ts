@@ -1,6 +1,7 @@
 export interface BrowseCampaign {
     id: string;
     brandName: string;
+    brandId: string;
     brandLogoUrl?: string;
     title: string;
     description?: string;

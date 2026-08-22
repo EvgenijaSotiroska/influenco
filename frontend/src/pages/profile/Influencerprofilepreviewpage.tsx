@@ -249,6 +249,7 @@ export function InfluencerProfilePreviewPage() {
                 {/* COVER POSITION CONTROLS */}
                 {isOwner && profile.coverImageUrl && (
                     <div className="cover-position-controls">
+
                         <button
                             type="button"
                             onClick={moveCoverUp}
@@ -272,11 +273,11 @@ export function InfluencerProfilePreviewPage() {
                             className="cover-save-btn"
                             onClick={handleSaveCover}
                             disabled={savingCover}
+                            title="Save cover position"
                         >
-                            {savingCover
-                                ? "..."
-                                : "✓"}
+                            {savingCover ? "..." : "✓"}
                         </button>
+
                     </div>
                 )}
             </div>
@@ -288,6 +289,7 @@ export function InfluencerProfilePreviewPage() {
                 <div className="preview-heading-row">
 
                     <div className="preview-heading-content">
+
                         <h1 className="preview-name">
                             {profile.displayName}
                         </h1>
@@ -297,9 +299,11 @@ export function InfluencerProfilePreviewPage() {
                                 {locationAndCategories}
                             </p>
                         )}
+
                     </div>
 
                     <div className="preview-actions">
+
                         {isOwner ? (
                             <Link
                                 to="/profile/edit"
@@ -308,17 +312,27 @@ export function InfluencerProfilePreviewPage() {
                                 Edit profile
                             </Link>
                         ) : (
-                            <button
-                                type="button"
-                                className="btn btn-solid preview-collaboration-btn"
-                                onClick={() =>
-                                    setShowCollabModal(true)
-                                }
-                            >
-                                Request collaboration
-                                <span>↗</span>
-                            </button>
+                            <>
+                                <button
+                                    type="button"
+                                    className="btn btn-outline preview-review-btn"
+                                >
+                                    Leave review
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className="btn btn-solid preview-collaboration-btn"
+                                    onClick={() =>
+                                        setShowCollabModal(true)
+                                    }
+                                >
+                                    Request collaboration
+                                    <span>↗</span>
+                                </button>
+                            </>
                         )}
+
                     </div>
                 </div>
 
@@ -374,6 +388,7 @@ export function InfluencerProfilePreviewPage() {
                             Average rating
                         </span>
                     </div>
+
                 </div>
 
                 {profile.statsUpdatedAt && isOwner && (
@@ -391,6 +406,7 @@ export function InfluencerProfilePreviewPage() {
                     {/* ABOUT */}
                     {profile.bio && (
                         <section className="preview-about">
+
                             <p className="preview-section-label">
                                 ABOUT
                             </p>
@@ -400,17 +416,19 @@ export function InfluencerProfilePreviewPage() {
                                     "{profile.bio}"
                                 </p>
                             </div>
+
                         </section>
                     )}
 
                     {/* SOCIAL PRESENCE */}
-                    {(profile.instagramFollowers !==
-                        undefined ||
-                        profile.tikTokFollowers !==
-                        undefined) && (
+                    {(
+                        profile.instagramFollowers !== undefined ||
+                        profile.tikTokFollowers !== undefined
+                    ) && (
                             <section className="preview-social">
 
                                 <div className="preview-social-header">
+
                                     <p className="preview-section-label">
                                         SOCIAL PRESENCE
                                     </p>
@@ -424,6 +442,7 @@ export function InfluencerProfilePreviewPage() {
                                             ).toLocaleDateString()}
                                         </p>
                                     )}
+
                                 </div>
 
                                 <div className="preview-platforms-box">
@@ -441,6 +460,7 @@ export function InfluencerProfilePreviewPage() {
                                                 className="preview-platform-col"
                                             >
                                                 <div className="preview-platform-top">
+
                                                     <span className="preview-platform-brand">
                                                         Instagram
                                                         <span className="verified-badge">
@@ -451,20 +471,18 @@ export function InfluencerProfilePreviewPage() {
                                                     <span className="preview-platform-handle">
                                                         {profile.instagramUrl
                                                             ? `@${profile.instagramUrl
-                                                                .split(
-                                                                    "/"
-                                                                )
-                                                                .filter(
-                                                                    Boolean
-                                                                )
+                                                                .split("/")
+                                                                .filter(Boolean)
                                                                 .pop()}`
                                                             : ""}
                                                     </span>
+
                                                 </div>
 
                                                 <div className="preview-platform-stats">
 
                                                     <div className="preview-stat-item">
+
                                                         <span className="preview-num">
                                                             {formatNumber(
                                                                 profile.instagramFollowers
@@ -476,9 +494,11 @@ export function InfluencerProfilePreviewPage() {
                                                         </span>
 
                                                         <div className="preview-bar preview-bar-dark" />
+
                                                     </div>
 
                                                     <div className="preview-stat-item">
+
                                                         <span className="preview-num">
                                                             {profile.instagramEngagementRate ??
                                                                 "—"}
@@ -493,7 +513,9 @@ export function InfluencerProfilePreviewPage() {
                                                         </span>
 
                                                         <div className="preview-bar preview-bar-light" />
+
                                                     </div>
+
                                                 </div>
                                             </a>
                                         )}
@@ -511,6 +533,7 @@ export function InfluencerProfilePreviewPage() {
                                                 className="preview-platform-col"
                                             >
                                                 <div className="preview-platform-top">
+
                                                     <span className="preview-platform-brand">
                                                         TikTok
                                                         <span className="verified-badge">
@@ -521,20 +544,18 @@ export function InfluencerProfilePreviewPage() {
                                                     <span className="preview-platform-handle">
                                                         {profile.tikTokUrl
                                                             ? `@${profile.tikTokUrl
-                                                                .split(
-                                                                    "/"
-                                                                )
-                                                                .filter(
-                                                                    Boolean
-                                                                )
+                                                                .split("/")
+                                                                .filter(Boolean)
                                                                 .pop()}`
                                                             : ""}
                                                     </span>
+
                                                 </div>
 
                                                 <div className="preview-platform-stats">
 
                                                     <div className="preview-stat-item">
+
                                                         <span className="preview-num">
                                                             {formatNumber(
                                                                 profile.tikTokFollowers
@@ -546,9 +567,11 @@ export function InfluencerProfilePreviewPage() {
                                                         </span>
 
                                                         <div className="preview-bar preview-bar-dark" />
+
                                                     </div>
 
                                                     <div className="preview-stat-item">
+
                                                         <span className="preview-num">
                                                             {profile.tikTokEngagementRate ??
                                                                 "—"}
@@ -563,23 +586,49 @@ export function InfluencerProfilePreviewPage() {
                                                         </span>
 
                                                         <div className="preview-bar preview-bar-light" />
+
                                                     </div>
+
                                                 </div>
                                             </a>
                                         )}
+
                                 </div>
+
                             </section>
                         )}
+
                 </div>
             </div>
+
+            {/* ================= POST INPUT ================= */}
+            {isOwner && (
+                <div className="preview-post-box">
+                    <div
+                        className="preview-post-avatar"
+                        style={
+                            profile.profilePictureUrl
+                                ? { backgroundImage: `url(${profile.profilePictureUrl})` }
+                                : undefined
+                        }
+                    />
+                    <input
+                        type="text"
+                        className="preview-post-input"
+                        placeholder="Share an update..."
+                        disabled
+                    />
+                    <button type="button" className="preview-post-btn" disabled>
+                        Post
+                    </button>
+                </div>
+            )}
 
             {/* ================= COLLABORATION MODAL ================= */}
             {showCollabModal && profile && (
                 <CollaborationRequestModal
                     influencerId={profile.id}
-                    influencerName={
-                        profile.displayName
-                    }
+                    influencerName={profile.displayName}
                     onClose={() =>
                         setShowCollabModal(false)
                     }
@@ -590,14 +639,13 @@ export function InfluencerProfilePreviewPage() {
             {showDealsModal && (
                 <DealsModal
                     influencerId={profile.id}
-                    influencerName={
-                        profile.displayName
-                    }
+                    influencerName={profile.displayName}
                     onClose={() =>
                         setShowDealsModal(false)
                     }
                 />
             )}
+
         </div>
     );
 }

@@ -20,6 +20,59 @@
     font-family: var(--font-body);
 }
 
+.preview-review-btn {
+    white-space: nowrap;
+}
+
+.preview-post-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    margin-top: 40px;
+    background: #fff;
+    max-width: 680px;
+}
+
+.preview-post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ink) center / cover no-repeat;
+    flex-shrink: 0;
+}
+
+.preview-post-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--ink);
+    outline: none;
+    cursor: not-allowed;
+}
+
+    .preview-post-input::placeholder {
+        color: var(--muted);
+    }
+
+.preview-post-btn {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 9px 20px;
+    border-radius: 999px;
+    border: none;
+    background: var(--ink);
+    color: var(--cream);
+    opacity: 0.5;
+    cursor: not-allowed;
+    flex-shrink: 0;
+}
+
 /* =========================
    COVER
 ========================= */
