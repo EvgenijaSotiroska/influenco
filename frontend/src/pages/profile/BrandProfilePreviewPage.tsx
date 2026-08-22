@@ -75,6 +75,9 @@ return (
                     >
                         Edit profile
                     </Link>
+                    <Link to="/brand/deals" className="btn btn-outline">
+                        View deals
+                    </Link>
                 </div>
             </div>
 

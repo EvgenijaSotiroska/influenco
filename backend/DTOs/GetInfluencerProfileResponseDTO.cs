@@ -9,6 +9,7 @@ public class GetInfluencerProfileResponse
     public string? Bio { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public string? CoverImageUrl { get; set; }
+    public int CoverImagePosition { get; set; }
     public string? Location { get; set; }
     public List<string> Categories { get; set; } = new();
     public bool IsVerified { get; set; }
@@ -32,4 +33,6 @@ public class GetInfluencerProfileResponse
     public double? InstagramEngagementRate { get; set; }
     public double? TikTokEngagementRate { get; set; }
     public double? OverallEngagementRate { get; set; }
+
+    public int DealsCount { get; set; }
 }

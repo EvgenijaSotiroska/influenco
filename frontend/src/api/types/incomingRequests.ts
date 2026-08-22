@@ -19,5 +19,7 @@ export interface RequestedInfluencer {
     profilePictureUrl?: string;
     status: "Pending" | "Accepted" | "Declined";
     offeredBudget?: number;
+    deliverables: string[];
     createdAt: string;
+    hasDeal: boolean;
 }

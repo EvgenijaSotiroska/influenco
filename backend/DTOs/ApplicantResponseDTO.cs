@@ -14,4 +14,5 @@ public class ApplicantResponse
     public decimal? ProposedRate { get; set; }
     public string Status { get; set; } = null!;
     public string? BrandResponseMessage { get; set; }
+    public bool HasDeal { get; set; }
 }

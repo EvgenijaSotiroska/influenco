@@ -9,6 +9,7 @@ public class UpdateInfluencerProfileRequest
     public List<string> Categories { get; set; } = new();
     public string? ProfilePictureUrl { get; set; }
     public string? CoverImageUrl { get; set; }
+    public int CoverImagePosition { get; set; } = 50;
 
     public string? InstagramUrl { get; set; }
     public int? InstagramFollowers { get; set; }

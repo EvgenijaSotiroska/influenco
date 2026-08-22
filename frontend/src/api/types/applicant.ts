@@ -11,11 +11,13 @@ export interface Applicant {
     proposedRate?: number;
     status: "Pending" | "Accepted" | "Rejected";
     brandResponseMessage?: string;
+    hasDeal: boolean;
 }
 
 export interface CampaignApplicants {
     campaignId: string;
     campaignTitle: string;
+    campaignDeliverables?: string;
     applicants: Applicant[];
 }
 

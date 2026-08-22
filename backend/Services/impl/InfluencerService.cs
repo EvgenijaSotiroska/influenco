@@ -24,7 +24,9 @@ public class InfluencerService : IInfluencerService
         if (influencer == null)
             throw new Exception("Influencer profile not found.");
 
-        return MapToResponse(influencer);
+        var response = MapToResponse(influencer);
+        response.DealsCount = await _context.Deals.CountAsync(d => d.InfluencerId == influencer.Id);
+        return response;
     }
 
     public async Task<GetInfluencerProfileResponse> GetPublicProfileByIdAsync(Guid influencerId)
@@ -37,7 +39,9 @@ public class InfluencerService : IInfluencerService
         if (influencer == null)
             throw new Exception("Influencer not found.");
 
-        return MapToResponse(influencer);
+        var response = MapToResponse(influencer);
+        response.DealsCount = await _context.Deals.CountAsync(d => d.InfluencerId == influencer.Id);
+        return response;
     }
 
     public async Task UpdateProfileAsync(Guid userId, UpdateInfluencerProfileRequest request)
@@ -54,6 +58,7 @@ public class InfluencerService : IInfluencerService
         influencer.Location = request.Location;
         influencer.ProfilePictureUrl = request.ProfilePictureUrl;
         influencer.CoverImageUrl = request.CoverImageUrl;
+        influencer.CoverImagePosition = Math.Clamp(request.CoverImagePosition, 0, 100);
         influencer.Categories = request.Categories;
 
         influencer.InstagramUrl = request.InstagramUrl;
@@ -152,6 +157,7 @@ public class InfluencerService : IInfluencerService
             Bio = influencer.Bio,
             ProfilePictureUrl = influencer.ProfilePictureUrl,
             CoverImageUrl = influencer.CoverImageUrl,
+            CoverImagePosition = influencer.CoverImagePosition,
             Location = influencer.Location,
             Categories = influencer.Categories,
             IsVerified = influencer.IsVerified,
@@ -196,5 +202,21 @@ public class InfluencerService : IInfluencerService
             return null;
 
         return Math.Round((double)avgViews / followers.Value * 100, 2);
+    }
+
+    public async Task UpdateCoverPositionAsync(
+    Guid userId,
+    int position)
+    {
+        var influencer = await _context.Influencers
+            .FirstOrDefaultAsync(i => i.AppUserId == userId);
+
+        if (influencer == null)
+            throw new Exception("Influencer profile not found.");
+
+        influencer.CoverImagePosition =
+            Math.Clamp(position, 0, 100);
+
+        await _context.SaveChangesAsync();
     }
 }

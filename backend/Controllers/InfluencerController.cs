@@ -64,4 +64,19 @@ public class InfluencerController : ControllerBase
 
         return Guid.Parse(userId);
     }
+
+    [HttpPut("profile/cover-position")]
+    [Authorize(Roles = "Influencer")]
+    public async Task<IActionResult> UpdateCoverPosition(
+    UpdateCoverPositionRequest request)
+    {
+        var userId = GetUserId();
+
+        await _service.UpdateCoverPositionAsync(
+            userId,
+            request.CoverImagePosition
+        );
+
+        return NoContent();
+    }
 }

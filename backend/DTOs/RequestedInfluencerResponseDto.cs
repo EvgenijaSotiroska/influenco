@@ -9,5 +9,7 @@ public class RequestedInfluencerResponse
     public string? ProfilePictureUrl { get; set; }
     public string Status { get; set; } = null!;
     public decimal? OfferedBudget { get; set; }
+    public List<string> Deliverables { get; set; } = new();
     public DateTime CreatedAt { get; set; }
+    public bool HasDeal { get; set; }
 }

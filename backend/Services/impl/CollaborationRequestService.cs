@@ -140,7 +140,7 @@ public class CollaborationRequestService : ICollaborationRequestService
     }
 
     public async Task<List<RequestedInfluencerResponse>> GetRequestedInfluencersForCampaignAsync(
-    Guid brandAppUserId, Guid campaignId)
+     Guid brandAppUserId, Guid campaignId)
     {
         var brand = await GetBrandOrThrow(brandAppUserId);
 
@@ -150,22 +150,31 @@ public class CollaborationRequestService : ICollaborationRequestService
         if (!campaignExists)
             throw new Exception("Campaign not found.");
 
-        return await _context.CollaborationRequests
+        var requests = await _context.CollaborationRequests
             .AsNoTracking()
             .Include(r => r.Influencer)
             .Where(r => r.CampaignId == campaignId && r.BrandId == brand.Id)
             .OrderByDescending(r => r.CreatedAt)
-            .Select(r => new RequestedInfluencerResponse
-            {
-                RequestId = r.Id,
-                InfluencerId = r.Influencer.Id,
-                DisplayName = r.Influencer.DisplayName,
-                Handle = r.Influencer.Handle,
-                ProfilePictureUrl = r.Influencer.ProfilePictureUrl,
-                Status = r.Status.ToString(),
-                OfferedBudget = r.OfferedBudget,
-                CreatedAt = r.CreatedAt
-            })
             .ToListAsync();
+
+        var dealtRequestIds = (await _context.Deals
+            .Where(d => d.CollaborationRequestId != null)
+            .Select(d => d.CollaborationRequestId!.Value)
+            .ToListAsync())
+            .ToHashSet();
+
+        return requests.Select(r => new RequestedInfluencerResponse
+        {
+            RequestId = r.Id,
+            InfluencerId = r.Influencer.Id,
+            DisplayName = r.Influencer.DisplayName,
+            Handle = r.Influencer.Handle,
+            ProfilePictureUrl = r.Influencer.ProfilePictureUrl,
+            Status = r.Status.ToString(),
+            OfferedBudget = r.OfferedBudget,
+            Deliverables = r.Deliverables,
+            CreatedAt = r.CreatedAt,
+            HasDeal = dealtRequestIds.Contains(r.Id)
+        }).ToList();
     }
 }

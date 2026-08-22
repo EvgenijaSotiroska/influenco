@@ -153,10 +153,22 @@ public class CampaignApplicationService : ICampaignApplicationService
             BrandResponseMessage = a.BrandResponseMessage
         }).ToList();
 
+        var dealtApplicationIds = (await _context.Deals
+            .Where(d => d.CampaignApplicationId != null && applications.Select(a => a.Id).Contains(d.CampaignApplicationId!.Value))
+            .Select(d => d.CampaignApplicationId!.Value)
+            .ToListAsync())
+            .ToHashSet();
+
+        foreach (var applicant in applicants)
+        {
+            applicant.HasDeal = dealtApplicationIds.Contains(applicant.ApplicationId);
+        }
+
         return new CampaignApplicantsResponse
         {
             CampaignId = campaign.Id,
             CampaignTitle = campaign.Title,
+            CampaignDeliverables = campaign.Deliverables,
             Applicants = applicants
         };
     }
@@ -191,26 +203,6 @@ public class CampaignApplicationService : ICampaignApplicationService
         await _context.SaveChangesAsync();
     }
 
-    private static double? CalculateOverallEngagementRate(Models.Influencer influencer)
-    {
-        var ig = CalculateEngagementRate(influencer.InstagramAvgViews, influencer.InstagramFollowers);
-        var tt = CalculateEngagementRate(influencer.TikTokAvgViews, influencer.TikTokFollowers);
-
-        var rates = new List<double>();
-        if (ig.HasValue) rates.Add(ig.Value);
-        if (tt.HasValue) rates.Add(tt.Value);
-
-        return rates.Count > 0 ? Math.Round(rates.Average(), 2) : null;
-    }
-
-    private static double? CalculateEngagementRate(int? avgViews, int? followers)
-    {
-        if (avgViews is null or 0 || followers is null or 0)
-            return null;
-
-        return Math.Round((double)avgViews / followers.Value * 100, 2);
-    }
-
     public async Task<List<MyApplicationResponse>> GetMyApplicationsAsync(Guid influencerAppUserId)
     {
         var influencer = await _context.Influencers
@@ -239,5 +231,25 @@ public class CampaignApplicationService : ICampaignApplicationService
                 CreatedAt = a.CreatedAt
             })
             .ToListAsync();
+    }
+
+    private static double? CalculateOverallEngagementRate(Models.Influencer influencer)
+    {
+        var ig = CalculateEngagementRate(influencer.InstagramAvgViews, influencer.InstagramFollowers);
+        var tt = CalculateEngagementRate(influencer.TikTokAvgViews, influencer.TikTokFollowers);
+
+        var rates = new List<double>();
+        if (ig.HasValue) rates.Add(ig.Value);
+        if (tt.HasValue) rates.Add(tt.Value);
+
+        return rates.Count > 0 ? Math.Round(rates.Average(), 2) : null;
+    }
+
+    private static double? CalculateEngagementRate(int? avgViews, int? followers)
+    {
+        if (avgViews is null or 0 || followers is null or 0)
+            return null;
+
+        return Math.Round((double)avgViews / followers.Value * 100, 2);
     }
 }

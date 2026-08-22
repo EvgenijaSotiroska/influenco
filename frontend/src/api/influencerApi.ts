@@ -28,6 +28,12 @@ const influencerApi = {
         const response = await axios.get(`influencer/discover/${id}`);
         return response.data;
     },
+
+    async updateCoverPosition(position: number) {
+        await axios.put("/influencer/profile/cover-position", {
+            coverImagePosition: position,
+        });
+    },
 };
 
 export default influencerApi;

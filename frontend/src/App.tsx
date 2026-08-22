@@ -18,6 +18,7 @@ import { BrowseCampaignsPage } from "./pages/campaigns/BrowseCampaignsPage.tsx";
 import { ReviewApplicantsPage } from "./pages/campaigns/ReviewApplicantsPage.tsx";
 import { MyApplicationsPage } from "./pages/campaigns/MyApplicationsPage.tsx";
 import { MyRequestsPage } from "./pages/campaigns/MyRequestsPage.tsx";
+import { BrandDealsPage } from "./pages/deals/BrandDealsPage.tsx";
 import "./App.css";
 
 function App() {
@@ -127,6 +128,14 @@ function App() {
                             element={
                                 <ProtectedRoute allowedRole="Influencer">
                                     <Layout><MyRequestsPage /></Layout>
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/brand/deals"
+                            element={
+                                <ProtectedRoute allowedRole="Brand">
+                                    <Layout><BrandDealsPage /></Layout>
                                 </ProtectedRoute>
                             }
                         />

@@ -16,6 +16,7 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     public DbSet<Campaign> Campaigns => Set<Campaign>();
     public DbSet<CampaignApplication> CampaignApplications => Set<CampaignApplication>();
     public DbSet<CollaborationRequest> CollaborationRequests => Set<CollaborationRequest>();
+    public DbSet<Deal> Deals => Set<Deal>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -122,5 +123,28 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
         builder.Entity<CollaborationRequest>()
             .Property(r => r.Status)
             .HasConversion<string>();
+
+        builder.Entity<Deal>()
+            .HasOne(d => d.Brand)
+            .WithMany()
+            .HasForeignKey(d => d.BrandId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Deal>()
+            .HasOne(d => d.Influencer)
+            .WithMany()
+            .HasForeignKey(d => d.InfluencerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Deal>()
+            .HasOne(d => d.Campaign)
+            .WithMany()
+            .HasForeignKey(d => d.CampaignId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Deal>()
+            .Property(d => d.Deliverables)
+            .HasConversion(stringListConverter)
+            .Metadata.SetValueComparer(stringListComparer);
     }
 }

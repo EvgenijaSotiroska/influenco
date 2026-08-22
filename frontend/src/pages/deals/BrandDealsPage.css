@@ -1,0 +1,103 @@
+.bd-page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+}
+
+.bd-header {
+    padding: 48px 0 24px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 28px;
+}
+
+.bd-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(32px, 4vw, 48px);
+    color: var(--ink);
+    margin: 0 0 10px;
+}
+
+.bd-subtitle {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: var(--muted);
+    margin: 0;
+}
+
+.bd-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.bd-status {
+    padding: 60px 0;
+    text-align: center;
+    font-family: var(--font-body);
+    color: var(--muted);
+}
+
+.bd-card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 20px 24px;
+}
+
+.bd-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bd-card-influencer {
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.bd-card-price {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--ink);
+}
+
+.bd-card-title {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+    margin: 8px 0;
+}
+
+.bd-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.bd-tag {
+    font-family: var(--font-body);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink);
+}
+
+.bd-verification {
+    margin-top: 16px;
+}
+
+.bd-verified-badge {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: #2f6b46;
+    background: #e4f2e8;
+    padding: 6px 14px;
+    border-radius: 999px;
+}

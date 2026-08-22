@@ -6,6 +6,7 @@ import influencerApi from "../../api/influencerApi";
 import type { InfluencerProfile } from "../../api/types/influencer";
 import "./InfluencerProfilePreviewPage.css";
 import { CollaborationRequestModal } from "../../components/CollaborationRequestModal/CollaborationRequestModal";
+import { DealsModal } from "../../components/DealsModal/DealsModal";
 
 function formatNumber(count?: number): string {
     if (count === undefined) return "—";
@@ -26,16 +27,26 @@ export function InfluencerProfilePreviewPage() {
     const { user } = useAuth();
 
     const ownProfileHook = useInfluencerProfile();
+
     const [showCollabModal, setShowCollabModal] = useState(false);
+    const [showDealsModal, setShowDealsModal] = useState(false);
 
     const [otherProfile, setOtherProfile] =
         useState<InfluencerProfile | null>(null);
 
-    const [otherLoading, setOtherLoading] =
-        useState(!!id);
+    const [otherLoading, setOtherLoading] = useState(!!id);
+    const [otherError, setOtherError] = useState<string | null>(null);
 
-    const [otherError, setOtherError] =
-        useState<string | null>(null);
+    /*
+     * Cover image position.
+     *
+     * 50 = centered
+     * 0   = image positioned at the top
+     * 100 = image positioned at the bottom
+     */
+    const [coverPosition, setCoverPosition] = useState(50);
+
+    const [savingCover, setSavingCover] = useState(false);
 
     useEffect(() => {
         if (!id) return;
@@ -51,6 +62,13 @@ export function InfluencerProfilePreviewPage() {
 
                 if (!cancelled) {
                     setOtherProfile(data);
+
+                    /*
+                     * Load the saved cover position from the backend.
+                     */
+                    setCoverPosition(
+                        data.coverImagePosition ?? 50
+                    );
                 }
             } catch (err) {
                 console.error(err);
@@ -71,6 +89,18 @@ export function InfluencerProfilePreviewPage() {
             cancelled = true;
         };
     }, [id]);
+
+    /*
+     * When viewing your own profile, initialize the cover position
+     * from the profile returned by useInfluencerProfile().
+     */
+    useEffect(() => {
+        if (!id && ownProfileHook.profile) {
+            setCoverPosition(
+                ownProfileHook.profile.coverImagePosition ?? 50
+            );
+        }
+    }, [id, ownProfileHook.profile]);
 
     const isViewingOther = !!id;
 
@@ -124,7 +154,8 @@ export function InfluencerProfilePreviewPage() {
     const isOwner =
         !!user?.email &&
         !!profile.email &&
-        user.email.toLowerCase() === profile.email.toLowerCase();
+        user.email.toLowerCase() ===
+        profile.email.toLowerCase();
 
     const locationAndCategories = [
         profile.location,
@@ -133,16 +164,73 @@ export function InfluencerProfilePreviewPage() {
         .filter(Boolean)
         .join(" · ");
 
+    /*
+     * Move cover image UP.
+     */
+    const moveCoverUp = () => {
+        setCoverPosition((prev) =>
+            Math.max(0, prev - 5)
+        );
+    };
+
+    /*
+     * Move cover image DOWN.
+     */
+    const moveCoverDown = () => {
+        setCoverPosition((prev) =>
+            Math.min(100, prev + 5)
+        );
+    };
+
+    /*
+     * Save the current cover position.
+     */
+    const handleSaveCover = async () => {
+        if (!isOwner || !profile.coverImageUrl) {
+            return;
+        }
+
+        try {
+            setSavingCover(true);
+
+            await influencerApi.updateCoverPosition(
+                coverPosition
+            );
+
+            /*
+             * Update the local profile so the UI knows
+             * the currently displayed value is saved.
+             */
+            if (!isViewingOther && ownProfileHook.profile) {
+                ownProfileHook.profile.coverImagePosition =
+                    coverPosition;
+            }
+
+            if (isViewingOther && otherProfile) {
+                setOtherProfile({
+                    ...otherProfile,
+                    coverImagePosition: coverPosition,
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Couldn't save the cover position.");
+        } finally {
+            setSavingCover(false);
+        }
+    };
+
     return (
         <div className="preview-page">
 
-            {/* COVER */}
+            {/* ================= COVER ================= */}
             <div
                 className="preview-cover"
                 style={
                     profile.coverImageUrl
                         ? {
                             backgroundImage: `url(${profile.coverImageUrl})`,
+                            backgroundPosition: `center ${coverPosition}%`,
                         }
                         : undefined
                 }
@@ -157,11 +245,46 @@ export function InfluencerProfilePreviewPage() {
                             : undefined
                     }
                 />
+
+                {/* COVER POSITION CONTROLS */}
+                {isOwner && profile.coverImageUrl && (
+                    <div className="cover-position-controls">
+                        <button
+                            type="button"
+                            onClick={moveCoverUp}
+                            title="Move image up"
+                            disabled={savingCover}
+                        >
+                            ↑
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={moveCoverDown}
+                            title="Move image down"
+                            disabled={savingCover}
+                        >
+                            ↓
+                        </button>
+
+                        <button
+                            type="button"
+                            className="cover-save-btn"
+                            onClick={handleSaveCover}
+                            disabled={savingCover}
+                        >
+                            {savingCover
+                                ? "..."
+                                : "✓"}
+                        </button>
+                    </div>
+                )}
             </div>
 
+            {/* ================= BODY ================= */}
             <div className="preview-body">
 
-                {/* HEADER */}
+                {/* ================= HEADER ================= */}
                 <div className="preview-heading-row">
 
                     <div className="preview-heading-content">
@@ -177,7 +300,6 @@ export function InfluencerProfilePreviewPage() {
                     </div>
 
                     <div className="preview-actions">
-
                         {isOwner ? (
                             <Link
                                 to="/profile/edit"
@@ -186,25 +308,28 @@ export function InfluencerProfilePreviewPage() {
                                 Edit profile
                             </Link>
                         ) : (
-                                <button
-                                    type="button"
-                                    className="btn btn-solid preview-collaboration-btn"
-                                    onClick={() => setShowCollabModal(true)}
-                                >
-                                    Request collaboration
-                                    <span>↗</span>
-                                </button>
+                            <button
+                                type="button"
+                                className="btn btn-solid preview-collaboration-btn"
+                                onClick={() =>
+                                    setShowCollabModal(true)
+                                }
+                            >
+                                Request collaboration
+                                <span>↗</span>
+                            </button>
                         )}
-
                     </div>
                 </div>
 
-                {/* STATS */}
+                {/* ================= STATS ================= */}
                 <div className="preview-stats">
 
                     <div className="preview-stat">
                         <span className="preview-stat-number">
-                            {formatNumber(profile.totalReach)}
+                            {formatNumber(
+                                profile.totalReach
+                            )}
                         </span>
 
                         <span className="preview-stat-label">
@@ -214,7 +339,8 @@ export function InfluencerProfilePreviewPage() {
 
                     <div className="preview-stat">
                         <span className="preview-stat-number">
-                            {profile.overallEngagementRate !== undefined
+                            {profile.overallEngagementRate !==
+                                undefined
                                 ? `${profile.overallEngagementRate}%`
                                 : "—"}
                         </span>
@@ -224,9 +350,14 @@ export function InfluencerProfilePreviewPage() {
                         </span>
                     </div>
 
-                    <div className="preview-stat">
+                    <div
+                        className="preview-stat preview-stat-clickable"
+                        onClick={() =>
+                            setShowDealsModal(true)
+                        }
+                    >
                         <span className="preview-stat-number">
-                            —
+                            {profile.dealsCount ?? 0}
                         </span>
 
                         <span className="preview-stat-label">
@@ -243,7 +374,6 @@ export function InfluencerProfilePreviewPage() {
                             Average rating
                         </span>
                     </div>
-
                 </div>
 
                 {profile.statsUpdatedAt && isOwner && (
@@ -255,7 +385,7 @@ export function InfluencerProfilePreviewPage() {
                     </p>
                 )}
 
-                {/* ABOUT + SOCIAL PRESENCE */}
+                {/* ================= ABOUT + SOCIAL ================= */}
                 <div className="preview-main-content">
 
                     {/* ABOUT */}
@@ -274,8 +404,10 @@ export function InfluencerProfilePreviewPage() {
                     )}
 
                     {/* SOCIAL PRESENCE */}
-                    {(profile.instagramFollowers !== undefined ||
-                        profile.tikTokFollowers !== undefined) && (
+                    {(profile.instagramFollowers !==
+                        undefined ||
+                        profile.tikTokFollowers !==
+                        undefined) && (
                             <section className="preview-social">
 
                                 <div className="preview-social-header">
@@ -285,7 +417,8 @@ export function InfluencerProfilePreviewPage() {
 
                                     {profile.statsUpdatedAt && (
                                         <p className="preview-updated">
-                                            Self-reported · Last updated{" "}
+                                            Self-reported · Last
+                                            updated{" "}
                                             {new Date(
                                                 profile.statsUpdatedAt
                                             ).toLocaleDateString()}
@@ -296,144 +429,173 @@ export function InfluencerProfilePreviewPage() {
                                 <div className="preview-platforms-box">
 
                                     {/* INSTAGRAM */}
-                                    {profile.instagramFollowers !== undefined && (
-                                        <a
-                                            href={
-                                                profile.instagramUrl || "#"
-                                            }
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="preview-platform-col"
-                                        >
-                                            <div className="preview-platform-top">
-                                                <span className="preview-platform-brand">
-                                                    Instagram
-                                                    <span className="verified-badge">
-                                                        ✓
-                                                    </span>
-                                                </span>
-
-                                                <span className="preview-platform-handle">
-                                                    {profile.instagramUrl
-                                                        ? `@${profile.instagramUrl
-                                                            .split("/")
-                                                            .filter(Boolean)
-                                                            .pop()}`
-                                                        : ""}
-                                                </span>
-                                            </div>
-
-                                            <div className="preview-platform-stats">
-
-                                                <div className="preview-stat-item">
-                                                    <span className="preview-num">
-                                                        {formatNumber(
-                                                            profile.instagramFollowers
-                                                        )}
-                                                    </span>
-
-                                                    <span className="preview-lbl">
-                                                        Followers
-                                                    </span>
-
-                                                    <div className="preview-bar preview-bar-dark" />
-                                                </div>
-
-                                                <div className="preview-stat-item">
-                                                    <span className="preview-num">
-                                                        {profile.instagramEngagementRate ?? "—"}
-                                                        <span className="percent-symbol">
-                                                            %
+                                    {profile.instagramFollowers !==
+                                        undefined && (
+                                            <a
+                                                href={
+                                                    profile.instagramUrl ||
+                                                    "#"
+                                                }
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="preview-platform-col"
+                                            >
+                                                <div className="preview-platform-top">
+                                                    <span className="preview-platform-brand">
+                                                        Instagram
+                                                        <span className="verified-badge">
+                                                            ✓
                                                         </span>
                                                     </span>
 
-                                                    <span className="preview-lbl">
-                                                        Engagement
+                                                    <span className="preview-platform-handle">
+                                                        {profile.instagramUrl
+                                                            ? `@${profile.instagramUrl
+                                                                .split(
+                                                                    "/"
+                                                                )
+                                                                .filter(
+                                                                    Boolean
+                                                                )
+                                                                .pop()}`
+                                                            : ""}
                                                     </span>
-
-                                                    <div className="preview-bar preview-bar-light" />
                                                 </div>
 
-                                            </div>
-                                        </a>
-                                    )}
+                                                <div className="preview-platform-stats">
+
+                                                    <div className="preview-stat-item">
+                                                        <span className="preview-num">
+                                                            {formatNumber(
+                                                                profile.instagramFollowers
+                                                            )}
+                                                        </span>
+
+                                                        <span className="preview-lbl">
+                                                            Followers
+                                                        </span>
+
+                                                        <div className="preview-bar preview-bar-dark" />
+                                                    </div>
+
+                                                    <div className="preview-stat-item">
+                                                        <span className="preview-num">
+                                                            {profile.instagramEngagementRate ??
+                                                                "—"}
+
+                                                            <span className="percent-symbol">
+                                                                %
+                                                            </span>
+                                                        </span>
+
+                                                        <span className="preview-lbl">
+                                                            Engagement
+                                                        </span>
+
+                                                        <div className="preview-bar preview-bar-light" />
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        )}
 
                                     {/* TIKTOK */}
-                                    {profile.tikTokFollowers !== undefined && (
-                                        <a
-                                            href={
-                                                profile.tikTokUrl || "#"
-                                            }
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="preview-platform-col"
-                                        >
-                                            <div className="preview-platform-top">
-                                                <span className="preview-platform-brand">
-                                                    TikTok
-                                                    <span className="verified-badge">
-                                                        ✓
-                                                    </span>
-                                                </span>
-
-                                                <span className="preview-platform-handle">
-                                                    {profile.tikTokUrl
-                                                        ? `@${profile.tikTokUrl
-                                                            .split("/")
-                                                            .filter(Boolean)
-                                                            .pop()}`
-                                                        : ""}
-                                                </span>
-                                            </div>
-
-                                            <div className="preview-platform-stats">
-
-                                                <div className="preview-stat-item">
-                                                    <span className="preview-num">
-                                                        {formatNumber(
-                                                            profile.tikTokFollowers
-                                                        )}
-                                                    </span>
-
-                                                    <span className="preview-lbl">
-                                                        Followers
-                                                    </span>
-
-                                                    <div className="preview-bar preview-bar-dark" />
-                                                </div>
-
-                                                <div className="preview-stat-item">
-                                                    <span className="preview-num">
-                                                        {profile.tikTokEngagementRate ?? "—"}
-                                                        <span className="percent-symbol">
-                                                            %
+                                    {profile.tikTokFollowers !==
+                                        undefined && (
+                                            <a
+                                                href={
+                                                    profile.tikTokUrl ||
+                                                    "#"
+                                                }
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="preview-platform-col"
+                                            >
+                                                <div className="preview-platform-top">
+                                                    <span className="preview-platform-brand">
+                                                        TikTok
+                                                        <span className="verified-badge">
+                                                            ✓
                                                         </span>
                                                     </span>
 
-                                                    <span className="preview-lbl">
-                                                        Engagement
+                                                    <span className="preview-platform-handle">
+                                                        {profile.tikTokUrl
+                                                            ? `@${profile.tikTokUrl
+                                                                .split(
+                                                                    "/"
+                                                                )
+                                                                .filter(
+                                                                    Boolean
+                                                                )
+                                                                .pop()}`
+                                                            : ""}
                                                     </span>
-
-                                                    <div className="preview-bar preview-bar-light" />
                                                 </div>
 
-                                            </div>
-                                        </a>
-                                    )}
+                                                <div className="preview-platform-stats">
 
+                                                    <div className="preview-stat-item">
+                                                        <span className="preview-num">
+                                                            {formatNumber(
+                                                                profile.tikTokFollowers
+                                                            )}
+                                                        </span>
+
+                                                        <span className="preview-lbl">
+                                                            Followers
+                                                        </span>
+
+                                                        <div className="preview-bar preview-bar-dark" />
+                                                    </div>
+
+                                                    <div className="preview-stat-item">
+                                                        <span className="preview-num">
+                                                            {profile.tikTokEngagementRate ??
+                                                                "—"}
+
+                                                            <span className="percent-symbol">
+                                                                %
+                                                            </span>
+                                                        </span>
+
+                                                        <span className="preview-lbl">
+                                                            Engagement
+                                                        </span>
+
+                                                        <div className="preview-bar preview-bar-light" />
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        )}
                                 </div>
-
                             </section>
                         )}
-
                 </div>
-
             </div>
+
+            {/* ================= COLLABORATION MODAL ================= */}
             {showCollabModal && profile && (
                 <CollaborationRequestModal
                     influencerId={profile.id}
-                    influencerName={profile.displayName}
-                    onClose={() => setShowCollabModal(false)}
+                    influencerName={
+                        profile.displayName
+                    }
+                    onClose={() =>
+                        setShowCollabModal(false)
+                    }
+                />
+            )}
+
+            {/* ================= DEALS MODAL ================= */}
+            {showDealsModal && (
+                <DealsModal
+                    influencerId={profile.id}
+                    influencerName={
+                        profile.displayName
+                    }
+                    onClose={() =>
+                        setShowDealsModal(false)
+                    }
                 />
             )}
         </div>

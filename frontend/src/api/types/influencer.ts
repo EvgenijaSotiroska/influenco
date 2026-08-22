@@ -6,6 +6,7 @@ export interface InfluencerProfile {
     bio?: string;
     profilePictureUrl?: string;
     coverImageUrl?: string;
+    coverImagePosition?: number;
     location?: string;
     categories: string[];
     isVerified: boolean;
@@ -29,6 +30,8 @@ export interface InfluencerProfile {
     instagramEngagementRate?: number;
     tikTokEngagementRate?: number;
     overallEngagementRate?: number;
+
+    dealsCount: number;
 }
 
 export interface UpdateInfluencerProfileRequest {
@@ -39,6 +42,7 @@ export interface UpdateInfluencerProfileRequest {
     categories: string[];
     profilePictureUrl?: string;
     coverImageUrl?: string;
+    coverImagePosition?: number;
 
     instagramUrl?: string;
     instagramFollowers?: number;

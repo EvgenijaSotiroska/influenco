@@ -11,6 +11,7 @@ public class Influencer : BaseEntity
     public string? Bio { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public string? CoverImageUrl { get; set; }
+    public int CoverImagePosition { get; set; } = 50;
     public string? Location { get; set; }
     public List<string> Categories { get; set; } = new();
     public bool IsVerified { get; set; }
