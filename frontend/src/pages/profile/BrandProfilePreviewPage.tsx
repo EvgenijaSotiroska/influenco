@@ -25,7 +25,7 @@ export function BrandProfilePreviewPage() {
         async function load() {
             try {
                 setOtherLoading(true);
-                const data = await brandApi.getById(id);
+                const data = await brandApi.getById(id!);
                 if (!cancelled) setOtherProfile(data);
             } catch (err) {
                 console.error(err);

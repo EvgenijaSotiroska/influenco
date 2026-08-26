@@ -94,7 +94,6 @@
     gap: 20px;
     flex-wrap: wrap;
     padding-bottom: 24px;
-    border-bottom: 1px solid var(--rule);
 }
 
 .brand-preview-identity {
@@ -183,7 +182,6 @@
 }
 
 .brand-preview-website-wrapper {
-    margin-top: 24px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -192,8 +190,9 @@
 .brand-preview-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-
+    border-top: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);
+    margin-top: 20px;
 }
 
 .brand-preview-stat {

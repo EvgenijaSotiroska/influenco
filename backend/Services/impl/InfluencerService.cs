@@ -42,6 +42,7 @@ public class InfluencerService : IInfluencerService
 
         var response = MapToResponse(influencer);
         response.DealsCount = await _context.Deals.CountAsync(d => d.InfluencerId == influencer.Id);
+        await AttachRatingAsync(response, influencer.Id);
         return response;
     }
     
