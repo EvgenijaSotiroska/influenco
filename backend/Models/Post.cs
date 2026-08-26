@@ -6,4 +6,5 @@ public class Post : BaseEntity
     public AppUser AppUser { get; set; } = null!;
 
     public string Content { get; set; } = null!;
+    public List<string> ImageUrls { get; set; } = new();
 }

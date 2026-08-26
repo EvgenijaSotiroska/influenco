@@ -173,5 +173,17 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
             .WithMany()
             .HasForeignKey(p => p.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        // ---- Post relationships ----
+        builder.Entity<Post>()
+            .HasOne(p => p.AppUser)
+            .WithMany()
+            .HasForeignKey(p => p.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Post>()
+            .Property(p => p.ImageUrls)
+            .HasConversion(stringListConverter)
+            .Metadata.SetValueComparer(stringListComparer);
     }
 }

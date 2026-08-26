@@ -7,6 +7,8 @@ namespace influenco.backend.Services.impl;
 
 public class PostService : IPostService
 {
+    private const int MaxImages = 3;
+
     private readonly AppDbContext _context;
 
     public PostService(AppDbContext context)
@@ -16,13 +18,22 @@ public class PostService : IPostService
 
     public async Task<PostResponse> CreateAsync(Guid appUserId, CreatePostRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.Content))
-            throw new Exception("Post content can't be empty.");
+        var content = request.Content?.Trim();
+
+        var imageUrls = (request.ImageUrls ?? new List<string>())
+            .Select(u => u.Trim())
+            .Where(u => !string.IsNullOrWhiteSpace(u))
+            .Take(MaxImages)
+            .ToList();
+
+        if (string.IsNullOrWhiteSpace(content) && imageUrls.Count == 0)
+            throw new Exception("A post needs text or at least one image.");
 
         var post = new Post
         {
             AppUserId = appUserId,
-            Content = request.Content.Trim()
+            Content = string.IsNullOrWhiteSpace(content) ? null : content,
+            ImageUrls = imageUrls
         };
 
         _context.Posts.Add(post);
@@ -36,6 +47,7 @@ public class PostService : IPostService
             AuthorName = authorName,
             AuthorAvatarUrl = authorAvatarUrl,
             Content = post.Content,
+            ImageUrls = post.ImageUrls,
             CreatedAt = post.CreatedAt
         };
     }
@@ -76,6 +88,7 @@ public class PostService : IPostService
                 AuthorName = authorName,
                 AuthorAvatarUrl = authorAvatarUrl,
                 Content = p.Content,
+                ImageUrls = p.ImageUrls,
                 CreatedAt = p.CreatedAt
             })
             .ToListAsync();

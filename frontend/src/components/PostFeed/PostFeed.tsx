@@ -3,6 +3,8 @@ import postApi from "../../api/postApi";
 import type { Post } from "../../api/types/post";
 import "./PostFeed.css";
 
+const MAX_IMAGES = 3;
+
 interface PostFeedProps {
     profileId: string;
     profileType: "influencer" | "brand";
@@ -14,6 +16,9 @@ export function PostFeed({ profileId, profileType, isOwner, avatarUrl }: PostFee
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [content, setContent] = useState("");
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const [imageDraft, setImageDraft] = useState("");
+    const [showImageInput, setShowImageInput] = useState(false);
     const [posting, setPosting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -41,19 +46,36 @@ export function PostFeed({ profileId, profileType, isOwner, avatarUrl }: PostFee
         };
     }, [profileId, profileType]);
 
+    function addImage() {
+        const trimmed = imageDraft.trim();
+        if (!trimmed || imageUrls.length >= MAX_IMAGES) return;
+        setImageUrls((prev) => [...prev, trimmed]);
+        setImageDraft("");
+    }
+
+    function removeImage(index: number) {
+        setImageUrls((prev) => prev.filter((_, i) => i !== index));
+    }
+
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        const trimmed = content.trim();
-        if (!trimmed) return;
+        const trimmedContent = content.trim();
+        if (!trimmedContent && imageUrls.length === 0) return;
 
         setPosting(true);
         setError(null);
 
         try {
-            const newPost = await postApi.create({ content: trimmed });
+            const newPost = await postApi.create({
+                content: trimmedContent || undefined,
+                imageUrls: imageUrls.length > 0 ? imageUrls : undefined,
+            });
             setPosts((prev) => [newPost, ...prev]);
             setContent("");
+            setImageUrls([]);
+            setImageDraft("");
+            setShowImageInput(false);
         } catch (err: any) {
             setError(
                 err?.response?.data?.message || err?.message || "Couldn't publish this update."
@@ -63,26 +85,84 @@ export function PostFeed({ profileId, profileType, isOwner, avatarUrl }: PostFee
         }
     }
 
+    const canSubmit = content.trim() || imageUrls.length > 0;
+
     return (
         <div className="pf-wrapper">
             {isOwner && (
                 <form className="pf-post-box" onSubmit={handleSubmit}>
-                    <div
-                        className="pf-post-avatar"
-                        style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
-                    />
-                    <input
-                        type="text"
-                        className="pf-post-input"
-                        placeholder="Share an update..."
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        maxLength={500}
-                        disabled={posting}
-                    />
-                    <button type="submit" className="pf-post-btn" disabled={posting || !content.trim()}>
-                        {posting ? "..." : "Post"}
-                    </button>
+                    <div className="pf-post-row">
+                        <div
+                            className="pf-post-avatar"
+                            style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
+                        />
+                        <input
+                            type="text"
+                            className="pf-post-input"
+                            placeholder="Share an update..."
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            maxLength={500}
+                            disabled={posting}
+                        />
+                        <button
+                            type="button"
+                            className={`pf-photo-btn ${showImageInput ? "pf-photo-btn-active" : ""}`}
+                            onClick={() => setShowImageInput((v) => !v)}
+                            title="Add photo"
+                            aria-label="Add photo"
+                        >
+                            🖼️
+                        </button>
+                        <button type="submit" className="pf-post-btn" disabled={posting || !canSubmit}>
+                            {posting ? "..." : "Post"}
+                        </button>
+                    </div>
+
+                    {showImageInput && imageUrls.length < MAX_IMAGES && (
+                        <div className="pf-image-input-row">
+                            <input
+                                type="text"
+                                className="pf-image-input"
+                                placeholder={`Paste an image URL (${imageUrls.length}/${MAX_IMAGES})...`}
+                                value={imageDraft}
+                                onChange={(e) => setImageDraft(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        addImage();
+                                    }
+                                }}
+                                disabled={posting}
+                            />
+                            <button
+                                type="button"
+                                className="pf-image-add-btn"
+                                onClick={addImage}
+                                disabled={!imageDraft.trim()}
+                            >
+                                Add
+                            </button>
+                        </div>
+                    )}
+
+                    {imageUrls.length > 0 && (
+                        <div className="pf-image-preview-row">
+                            {imageUrls.map((url, index) => (
+                                <div className="pf-image-preview" key={index}>
+                                    <img src={url} alt="Preview" />
+                                    <button
+                                        type="button"
+                                        className="pf-image-remove"
+                                        onClick={() => removeImage(index)}
+                                        aria-label="Remove image"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </form>
             )}
 
@@ -107,7 +187,14 @@ export function PostFeed({ profileId, profileType, isOwner, avatarUrl }: PostFee
                                         {new Date(post.createdAt).toLocaleDateString()}
                                     </span>
                                 </div>
-                                <p className="pf-item-content">{post.content}</p>
+                                {post.content && <p className="pf-item-content">{post.content}</p>}
+                                {post.imageUrls.length > 0 && (
+                                    <div className={`pf-item-images pf-item-images-${post.imageUrls.length}`}>
+                                        {post.imageUrls.map((url, index) => (
+                                            <img key={index} className="pf-item-image" src={url} alt="" />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

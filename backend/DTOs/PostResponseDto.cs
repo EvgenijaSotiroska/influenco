@@ -6,5 +6,6 @@ public class PostResponse
     public string AuthorName { get; set; } = null!;
     public string? AuthorAvatarUrl { get; set; }
     public string Content { get; set; } = null!;
+    public List<string> ImageUrls { get; set; } = new();
     public DateTime CreatedAt { get; set; }
 }
