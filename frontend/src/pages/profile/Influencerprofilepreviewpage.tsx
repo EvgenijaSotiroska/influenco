@@ -318,14 +318,6 @@ export function InfluencerProfilePreviewPage() {
                             </Link>
                         ) : (
                             <>
-<<<<<<< Updated upstream
-                                <button
-                                    type="button"
-                                    className="btn btn-outline preview-review-btn"
-                                >
-                                    Leave review
-                                </button>
-=======
                                 {user?.role === "Brand" && (
                                     <button
                                         type="button"
@@ -337,7 +329,6 @@ export function InfluencerProfilePreviewPage() {
                                         Leave review
                                     </button>
                                 )}
->>>>>>> Stashed changes
 
                                 <button
                                     type="button"
@@ -627,30 +618,6 @@ export function InfluencerProfilePreviewPage() {
                 </div>
             </div>
 
-<<<<<<< Updated upstream
-            {/* ================= POST INPUT ================= */}
-            {isOwner && (
-                <div className="preview-post-box">
-                    <div
-                        className="preview-post-avatar"
-                        style={
-                            profile.profilePictureUrl
-                                ? { backgroundImage: `url(${profile.profilePictureUrl})` }
-                                : undefined
-                        }
-                    />
-                    <input
-                        type="text"
-                        className="preview-post-input"
-                        placeholder="Share an update..."
-                        disabled
-                    />
-                    <button type="button" className="preview-post-btn" disabled>
-                        Post
-                    </button>
-                </div>
-            )}
-=======
             {/* ================= POSTS ================= */}
             <div className="preview-body">
                 <PostFeed
@@ -660,7 +627,6 @@ export function InfluencerProfilePreviewPage() {
                     avatarUrl={profile.profilePictureUrl}
                 />
             </div>
->>>>>>> Stashed changes
 
             {/* ================= COLLABORATION MODAL ================= */}
             {showCollabModal && profile && (
@@ -684,8 +650,6 @@ export function InfluencerProfilePreviewPage() {
                 />
             )}
 
-<<<<<<< Updated upstream
-=======
             {/* ================= REVIEW MODAL ================= */}
             {showReviewModal && (
                 <ReviewModal
@@ -708,7 +672,6 @@ export function InfluencerProfilePreviewPage() {
                 />
             )}
 
->>>>>>> Stashed changes
         </div>
     );
 }
