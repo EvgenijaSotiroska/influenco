@@ -1,1 +1,3 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:5109/api";
+/// <reference types="vite/client" />
+
+export const API_BASE_URL = import.meta.env.VITE_BASE_API_URL || "http://localhost:5107/api";

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { UserPayload } from "../types/auth.ts";
+import type { UserPayload } from "../api/types/auth.ts";
 
 export interface AuthContextType {
     user: UserPayload | null;

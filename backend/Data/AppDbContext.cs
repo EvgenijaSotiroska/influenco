@@ -17,6 +17,8 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
     public DbSet<CampaignApplication> CampaignApplications => Set<CampaignApplication>();
     public DbSet<CollaborationRequest> CollaborationRequests => Set<CollaborationRequest>();
     public DbSet<Deal> Deals => Set<Deal>();
+    public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<Post> Posts => Set<Post>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -146,5 +148,30 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
             .Property(d => d.Deliverables)
             .HasConversion(stringListConverter)
             .Metadata.SetValueComparer(stringListComparer);
+        
+         // ---- Review relationships ----
+        builder.Entity<Review>()
+            .HasOne(r => r.Brand)
+            .WithMany()
+            .HasForeignKey(r => r.BrandId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Review>()
+            .HasOne(r => r.Influencer)
+            .WithMany()
+            .HasForeignKey(r => r.InfluencerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // One review per brand per influencer — leaving a new review updates the old one instead
+        builder.Entity<Review>()
+            .HasIndex(r => new { r.BrandId, r.InfluencerId })
+            .IsUnique();
+
+        // ---- Post relationships ----
+        builder.Entity<Post>()
+            .HasOne(p => p.AppUser)
+            .WithMany()
+            .HasForeignKey(p => p.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import AuthContext from "../context/authContext.ts";
-import type { UserPayload } from "../types/auth.ts";
+import type { UserPayload } from "../api/types/auth.ts";
 import { decodeToken } from "../utils/jwt.ts";
 
 function buildUserFromToken(token: string): UserPayload | null {

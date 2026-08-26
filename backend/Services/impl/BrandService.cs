@@ -40,7 +40,9 @@ public class BrandService : IBrandService
         return await MapToResponseAsync(brand);
     }
 
-    public async Task UpdateProfileAsync(Guid userId, UpdateBrandProfileRequest request)
+    public async Task UpdateProfileAsync(
+        Guid userId,
+        UpdateBrandProfileRequest request)
     {
         var brand = await _context.Brands
             .FirstOrDefaultAsync(b => b.AppUserId == userId);

@@ -26,6 +26,7 @@ public class InfluencerService : IInfluencerService
 
         var response = MapToResponse(influencer);
         response.DealsCount = await _context.Deals.CountAsync(d => d.InfluencerId == influencer.Id);
+        await AttachRatingAsync(response, influencer.Id);
         return response;
     }
 
@@ -42,6 +43,17 @@ public class InfluencerService : IInfluencerService
         var response = MapToResponse(influencer);
         response.DealsCount = await _context.Deals.CountAsync(d => d.InfluencerId == influencer.Id);
         return response;
+    }
+    
+    private async Task AttachRatingAsync(GetInfluencerProfileResponse response, Guid influencerId)
+    {
+        var ratings = await _context.Reviews
+            .Where(r => r.InfluencerId == influencerId)
+            .Select(r => r.Rating)
+            .ToListAsync();
+
+        response.ReviewsCount = ratings.Count;
+        response.AverageRating = ratings.Count > 0 ? Math.Round(ratings.Average(), 1) : null;
     }
 
     public async Task UpdateProfileAsync(Guid userId, UpdateInfluencerProfileRequest request)

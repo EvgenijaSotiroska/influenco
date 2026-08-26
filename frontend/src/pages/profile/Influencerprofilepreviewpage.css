@@ -222,6 +222,7 @@
     text-transform: uppercase;
     color: var(--muted);
     margin-bottom: 20px;
+    margin-top: 25px;
     display: block;
 }
 
@@ -244,7 +245,7 @@
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 700;
-    font-size: 28px;
+    font-size: 22px;
     line-height: 1.35;
     color: var(--ink);
     margin: 0;

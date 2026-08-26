@@ -7,6 +7,9 @@ import type { InfluencerProfile } from "../../api/types/influencer";
 import "./InfluencerProfilePreviewPage.css";
 import { CollaborationRequestModal } from "../../components/CollaborationRequestModal/CollaborationRequestModal";
 import { DealsModal } from "../../components/DealsModal/DealsModal";
+import { ReviewModal } from "../../components/ReviewModal/ReviewModal";
+import { ReviewsListModal } from "../../components/ReviewsListModal/ReviewsListModal";
+import { PostFeed } from "../../components/PostFeed/PostFeed";
 
 function formatNumber(count?: number): string {
     if (count === undefined) return "—";
@@ -26,10 +29,12 @@ export function InfluencerProfilePreviewPage() {
     const { id } = useParams<{ id?: string }>();
     const { user } = useAuth();
 
-    const ownProfileHook = useInfluencerProfile();
+    const ownProfileHook = useInfluencerProfile(!id);
 
     const [showCollabModal, setShowCollabModal] = useState(false);
     const [showDealsModal, setShowDealsModal] = useState(false);
+    const [showReviewModal, setShowReviewModal] = useState(false);
+    const [showReviewsListModal, setShowReviewsListModal] = useState(false);
 
     const [otherProfile, setOtherProfile] =
         useState<InfluencerProfile | null>(null);
@@ -58,7 +63,7 @@ export function InfluencerProfilePreviewPage() {
                 setOtherLoading(true);
 
                 const data =
-                    await influencerApi.getInfluencerDetail(id);
+                    await influencerApi.getInfluencerDetail(id!);
 
                 if (!cancelled) {
                     setOtherProfile(data);
@@ -313,12 +318,26 @@ export function InfluencerProfilePreviewPage() {
                             </Link>
                         ) : (
                             <>
+<<<<<<< Updated upstream
                                 <button
                                     type="button"
                                     className="btn btn-outline preview-review-btn"
                                 >
                                     Leave review
                                 </button>
+=======
+                                {user?.role === "Brand" && (
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline preview-review-btn"
+                                        onClick={() =>
+                                            setShowReviewModal(true)
+                                        }
+                                    >
+                                        Leave review
+                                    </button>
+                                )}
+>>>>>>> Stashed changes
 
                                 <button
                                     type="button"
@@ -379,9 +398,16 @@ export function InfluencerProfilePreviewPage() {
                         </span>
                     </div>
 
-                    <div className="preview-stat">
+                    <div
+                        className="preview-stat preview-stat-clickable"
+                        onClick={() =>
+                            setShowReviewsListModal(true)
+                        }
+                    >
                         <span className="preview-stat-number">
-                            —
+                            {profile.averageRating == null
+                                ? "—"
+                                : Number(profile.averageRating).toFixed(1)}
                         </span>
 
                         <span className="preview-stat-label">
@@ -601,6 +627,7 @@ export function InfluencerProfilePreviewPage() {
                 </div>
             </div>
 
+<<<<<<< Updated upstream
             {/* ================= POST INPUT ================= */}
             {isOwner && (
                 <div className="preview-post-box">
@@ -623,6 +650,17 @@ export function InfluencerProfilePreviewPage() {
                     </button>
                 </div>
             )}
+=======
+            {/* ================= POSTS ================= */}
+            <div className="preview-body">
+                <PostFeed
+                    profileId={profile.id}
+                    profileType="influencer"
+                    isOwner={isOwner}
+                    avatarUrl={profile.profilePictureUrl}
+                />
+            </div>
+>>>>>>> Stashed changes
 
             {/* ================= COLLABORATION MODAL ================= */}
             {showCollabModal && profile && (
@@ -646,6 +684,31 @@ export function InfluencerProfilePreviewPage() {
                 />
             )}
 
+<<<<<<< Updated upstream
+=======
+            {/* ================= REVIEW MODAL ================= */}
+            {showReviewModal && (
+                <ReviewModal
+                    influencerId={profile.id}
+                    influencerName={profile.displayName}
+                    onClose={() =>
+                        setShowReviewModal(false)
+                    }
+                />
+            )}
+
+            {/* ================= REVIEWS LIST MODAL ================= */}
+            {showReviewsListModal && (
+                <ReviewsListModal
+                    influencerId={profile.id}
+                    influencerName={profile.displayName}
+                    onClose={() =>
+                        setShowReviewsListModal(false)
+                    }
+                />
+            )}
+
+>>>>>>> Stashed changes
         </div>
     );
 }

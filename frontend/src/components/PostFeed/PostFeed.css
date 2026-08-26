@@ -1,0 +1,121 @@
+.pf-wrapper {
+    margin-top: 32px;
+    padding-top: 24px;
+}
+
+.pf-post-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.pf-post-avatar {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--rule);
+    background-size: cover;
+    background-position: center;
+}
+
+.pf-post-input {
+    /* flex: 1 1 auto; */
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 11px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--rule-strong);
+    background: #fbfaf7;
+    outline: none;
+    min-width: 0;
+    width: 450px;
+}
+
+    .pf-post-input:focus {
+        border-color: var(--ink);
+        background: #fff;
+    }
+
+.pf-post-btn {
+    flex: 0 0 auto;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--cream);
+    cursor: pointer;
+}
+
+    .pf-post-btn:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+
+.pf-error {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: #b3261e;
+    margin: 0 0 16px;
+}
+
+.pf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pf-item {
+    display: flex;
+    gap: 12px;
+}
+
+.pf-item-avatar {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--rule);
+    background-size: cover;
+    background-position: center;
+}
+
+.pf-item-body {
+    flex: 1 1 auto;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 16px;
+}
+
+.pf-item-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.pf-item-author {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--ink);
+}
+
+.pf-item-date {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.pf-item-content {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}

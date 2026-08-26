@@ -5,13 +5,13 @@ import type {
     UpdateInfluencerProfileRequest
 } from "../api/types/influencer.ts";
 
-const useInfluencerProfile = () => {
+const useInfluencerProfile = (enabled = true) => {
 
     const [profile, setProfile] =
         useState<InfluencerProfile | null>(null);
 
     const [loading, setLoading] =
-        useState(true);
+        useState(enabled);
 
     const [saving, setSaving] =
         useState(false);
@@ -20,8 +20,13 @@ const useInfluencerProfile = () => {
         useState<string>();
 
     useEffect(() => {
+        if (!enabled) {
+            setLoading(false);
+            return;
+        }
+
         loadProfile();
-    }, []);
+    }, [enabled]);
 
     const loadProfile = async () => {
 

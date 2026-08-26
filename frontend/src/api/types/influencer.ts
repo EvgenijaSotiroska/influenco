@@ -32,6 +32,8 @@ export interface InfluencerProfile {
     overallEngagementRate?: number;
 
     dealsCount: number;
+    averageRating?: number | null;
+    reviewsCount?: number;
 }
 
 export interface UpdateInfluencerProfileRequest {

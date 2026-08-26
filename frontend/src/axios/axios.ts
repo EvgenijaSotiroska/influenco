@@ -7,6 +7,8 @@ const axiosInstance = axios.create({
     }
 });
 
+console.log("API BASE URL:", import.meta.env.VITE_BASE_API_URL);
+
 axiosInstance.interceptors.request.use(
     (config) => {
         const jwtToken = localStorage.getItem('token');

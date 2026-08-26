@@ -20,6 +20,14 @@ frontend/dist/
 frontend/.env
 frontend/.env.local
 
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
 # OS noise
 .DS_Store
 Thumbs.db

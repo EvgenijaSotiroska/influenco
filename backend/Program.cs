@@ -47,6 +47,8 @@ builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<ICampaignApplicationService, CampaignApplicationService>();
 builder.Services.AddScoped<ICollaborationRequestService, CollaborationRequestService>();
 builder.Services.AddScoped<IDealService, DealService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IPostService, PostService>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>()!;
 

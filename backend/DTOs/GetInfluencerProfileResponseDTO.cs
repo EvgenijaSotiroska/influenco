@@ -35,4 +35,6 @@ public class GetInfluencerProfileResponse
     public double? OverallEngagementRate { get; set; }
 
     public int DealsCount { get; set; }
+    public double? AverageRating { get; set; }
+    public int ReviewsCount { get; set; }
 }
