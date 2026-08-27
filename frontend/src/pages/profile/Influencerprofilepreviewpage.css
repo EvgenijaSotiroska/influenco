@@ -293,6 +293,11 @@
     width: 100%;
 }
 
+.preview-posts-divider {
+    border-top: 1px solid var(--rule);
+    margin: 0 0 12px;
+}
+
 .preview-platform-col {
     flex: 1;
     padding: 28px 24px;

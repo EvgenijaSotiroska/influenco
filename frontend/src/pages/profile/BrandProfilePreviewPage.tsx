@@ -20,30 +20,46 @@ export function BrandProfilePreviewPage() {
 
     useEffect(() => {
         if (!id) return;
+
         let cancelled = false;
 
         async function load() {
             try {
                 setOtherLoading(true);
-                const data = await brandApi.getById(id!);
-                if (!cancelled) setOtherProfile(data);
+
+                const data = await brandApi.getById(id);
+
+                if (!cancelled) {
+                    setOtherProfile(data);
+                }
             } catch (err) {
                 console.error(err);
-                if (!cancelled) setOtherError("Couldn't load this brand's profile.");
+
+                if (!cancelled) {
+                    setOtherError("Couldn't load this brand's profile.");
+                }
             } finally {
-                if (!cancelled) setOtherLoading(false);
+                if (!cancelled) {
+                    setOtherLoading(false);
+                }
             }
         }
 
         load();
+
         return () => {
             cancelled = true;
         };
     }, [id]);
 
     const isViewingOther = !!id;
-    const profile = isViewingOther ? otherProfile : ownProfileHook.profile;
-    const loading = isViewingOther ? otherLoading : ownProfileHook.loading;
+    const profile = isViewingOther
+        ? otherProfile
+        : ownProfileHook.profile;
+
+    const loading = isViewingOther
+        ? otherLoading
+        : ownProfileHook.loading;
 
     if (loading) {
         return <div className="profile-loading">Loading...</div>;
@@ -69,7 +85,11 @@ export function BrandProfilePreviewPage() {
         return (
             <div className="profile-empty">
                 <p>You haven't created a company profile yet.</p>
-                <Link to="/brand/profile/edit" className="btn btn-solid">
+
+                <Link
+                    to="/brand/profile/edit"
+                    className="btn btn-solid"
+                >
                     Create your profile
                 </Link>
             </div>
@@ -127,102 +147,94 @@ export function BrandProfilePreviewPage() {
                                     {profile.industry}
                                 </p>
                             )}
+
+                            {profile.website && (
+                                <a
+                                    href={websiteUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="brand-preview-website-link"
+                                >
+                                    Go to website
+                                    <span>↗</span>
+                                </a>
+                            )}
                         </div>
                     </div>
 
-                    <div className="brand-preview-actions">
-                        <Link
-                            to="/brand/profile/edit"
-                            className="btn btn-outline"
-                        >
-                            Edit profile
-                        </Link>
+                    {isOwner && (
+                        <div className="brand-preview-actions">
+                            <Link
+                                to="/brand/profile/edit"
+                                className="btn btn-outline"
+                            >
+                                Edit profile
+                            </Link>
 
-                        <Link
-                            to="/brand/deals"
-                            className="btn btn-outline"
-                        >
-                            View deals
-                        </Link>
-                    </div>
+                            <Link
+                                to="/brand/deals"
+                                className="btn btn-outline"
+                            >
+                                View deals
+                            </Link>
+                        </div>
+                    )}
                 </div>
 
-                {/* Website */}
-                {profile.website && (
-                    <div className="brand-preview-website-wrapper">
-                        <span className="brand-preview-website-label">
-                            Link to website:
-                        </span>
-
-                        <a
-                            href={websiteUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="brand-preview-website"
-                        >
-                            {profile.website}
-                        </a>
-                    </div>
-                )}
-
-                {/* Statistics */}
-                <div className="brand-preview-stats">
-                    <div className="brand-preview-stat">
-                        <span className="brand-preview-stat-number">
-                            {profile.activeCampaignsCount}
-                        </span>
-
-                        <span className="brand-preview-stat-label">
-                            Active campaigns
-                        </span>
-                    </div>
-
-                    <div className="brand-preview-stat">
-                        <span className="brand-preview-stat-number">
-                            {profile.dealsCount}
-                        </span>
-
-                        <span className="brand-preview-stat-label">
-                            Completed deals
-                        </span>
-                    </div>
-
-                    <div className="brand-preview-stat">
-                        <span className="brand-preview-stat-number">
-                            {profile.industry || "—"}
-                        </span>
-
-                        <span className="brand-preview-stat-label">
-                            Industry
-                        </span>
-                    </div>
-                </div>
-
-                {/* Description */}
-                {profile.description && (
-                    <section className="brand-preview-about">
-                        <p className="preview-section-label">
-                            ABOUT
-                        </p>
-
-                        <div className="preview-about-content">
-                            <p className="preview-about-quote">
-                                {profile.description}
+                {/* About + Stats */}
+                <div className="brand-preview-main">
+                    {profile.description && (
+                        <section className="brand-preview-about">
+                            <p className="brand-preview-section-label">
+                                ABOUT
                             </p>
+
+                            <div className="brand-preview-about-content">
+                                <p className="brand-preview-about-quote">
+                                    "{profile.description}"
+                                </p>
+                            </div>
+                        </section>
+                    )}
+
+                    <div className="brand-preview-stats-col">
+                        <div className="brand-preview-stat">
+                            <span className="brand-preview-stat-number">
+                                {profile.activeCampaignsCount}
+                            </span>
+
+                            <span className="brand-preview-stat-label">
+                                Active campaigns
+                            </span>
                         </div>
-                    </section>
-                )}
+
+                        <div className="brand-preview-stat">
+                            <span className="brand-preview-stat-number">
+                                {profile.dealsCount}
+                            </span>
+
+                            <span className="brand-preview-stat-label">
+                                Completed deals
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Active campaigns */}
+                <ActiveCampaignsCard isOwner={isOwner} brandId={profile.id} />
 
                 {/* Posts */}
+                <div className="brand-preview-posts-divider" />
+                <p className="brand-preview-section-label">
+                    {isOwner ? "ADD A POST" : "PORTFOLIO"}
+                </p>
+
                 <PostFeed
                     profileId={profile.id}
                     profileType="brand"
-                    isOwner={true}
+                    isOwner={isOwner}
                     avatarUrl={profile.logoUrl}
                 />
-
-                {/* Active campaigns */}
-                <ActiveCampaignsCard />
             </div>
         </div>
     );

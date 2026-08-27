@@ -1,15 +1,21 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import "./Header.css";
 
 export function Header() {
     const { isLoggedIn, user, logout } = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const isActive = (path: string) => location.pathname === path;
 
     const profilePath = user?.role === "Brand" ? "/brand/profile/preview" : "/profile/preview";
     const isInfluencer = user?.role === "Influencer";
+
+    function handleLogout() {
+        logout();
+        navigate("/login");
+    }
 
     return (
         <header className="site-header">
@@ -68,7 +74,7 @@ export function Header() {
 
                 <div className="header-actions">
                     {isLoggedIn ? (
-                        <button type="button" className="btn btn-solid" onClick={logout}>
+                        <button type="button" className="btn btn-solid" onClick={handleLogout}>
                             Log out
                         </button>
                     ) : (

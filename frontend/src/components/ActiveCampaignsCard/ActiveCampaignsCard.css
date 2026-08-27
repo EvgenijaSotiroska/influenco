@@ -41,6 +41,10 @@
     padding: 20px 0;
 }
 
+.active-campaign-row-static {
+    cursor: default;
+}
+
 .active-campaign-row {
     display: flex;
     align-items: center;
@@ -51,6 +55,7 @@
     text-decoration: none;
     color: inherit;
 }
+
 
     .active-campaign-row:last-child {
         border-bottom: none;

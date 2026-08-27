@@ -620,6 +620,9 @@ export function InfluencerProfilePreviewPage() {
 
             {/* ================= POSTS ================= */}
             <div className="preview-body">
+                <div className="preview-posts-divider" />
+                <p className="preview-section-label">{isOwner ? "ADD A POST" : "PORTFOLIO"}</p>
+
                 <PostFeed
                     profileId={profile.id}
                     profileType="influencer"

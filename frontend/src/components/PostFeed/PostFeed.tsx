@@ -90,33 +90,21 @@ export function PostFeed({ profileId, profileType, isOwner, avatarUrl }: PostFee
     return (
         <div className="pf-wrapper">
             {isOwner && (
-                <form className="pf-post-box" onSubmit={handleSubmit}>
-                    <div className="pf-post-row">
+                <form className="pf-composer" onSubmit={handleSubmit}>
+                    <div className="pf-composer-top">
                         <div
                             className="pf-post-avatar"
                             style={avatarUrl ? { backgroundImage: `url(${avatarUrl})` } : undefined}
                         />
-                        <input
-                            type="text"
-                            className="pf-post-input"
+                        <textarea
+                            className="pf-composer-textarea"
                             placeholder="Share an update..."
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             maxLength={500}
                             disabled={posting}
+                            rows={2}
                         />
-                        <button
-                            type="button"
-                            className={`pf-photo-btn ${showImageInput ? "pf-photo-btn-active" : ""}`}
-                            onClick={() => setShowImageInput((v) => !v)}
-                            title="Add photo"
-                            aria-label="Add photo"
-                        >
-                            🖼️
-                        </button>
-                        <button type="submit" className="pf-post-btn" disabled={posting || !canSubmit}>
-                            {posting ? "..." : "Post"}
-                        </button>
                     </div>
 
                     {showImageInput && imageUrls.length < MAX_IMAGES && (
@@ -163,6 +151,21 @@ export function PostFeed({ profileId, profileType, isOwner, avatarUrl }: PostFee
                             ))}
                         </div>
                     )}
+
+                    <div className="pf-composer-toolbar">
+                        <button
+                            type="button"
+                            className={`pf-photo-btn ${showImageInput ? "pf-photo-btn-active" : ""}`}
+                            onClick={() => setShowImageInput((v) => !v)}
+                        >
+                            <span className="pf-photo-icon">🖼️</span>
+                            Photo
+                        </button>
+
+                        <button type="submit" className="pf-post-btn" disabled={posting || !canSubmit}>
+                            {posting ? "Posting..." : "Post"}
+                        </button>
+                    </div>
                 </form>
             )}
 
